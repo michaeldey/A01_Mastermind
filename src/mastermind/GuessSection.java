@@ -40,7 +40,7 @@ public class GuessSection {
 			b.setIcon(pegHole);			//make the image a blank peg
 			b.setContentAreaFilled(false);	//clear the gradient and stroke from button
 			b.setBorder(null);				//clear border from button
-			marbleBox.add(b);
+			marbleBox.add(b);				//add the button to marbleBox
 		}
 		for (JLabel f : feedbacks)
 		{

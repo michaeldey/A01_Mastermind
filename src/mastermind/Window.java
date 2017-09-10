@@ -37,6 +37,7 @@ public class Window extends JFrame implements ActionListener{
 			m = new GuessSection();
 			grid.add(m.getHoldingBox());
 			JButton[] btn = m.getMarbleList();
+			
 //			for (JButton tmp : btn)
 //			{
 //				tmp.addActionListener(this);

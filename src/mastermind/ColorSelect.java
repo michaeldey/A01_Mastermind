@@ -52,7 +52,7 @@ public class ColorSelect extends JFrame {
 	 * @param selection is the item selected from Window
 	 * @return image object
 	 * 
-	 * This method takes an int selection which returns an image that determines the user selection in Window
+	 * This method takes an int selection which returns an image that determines the user selection in Window.
 	 */
 	public ImageIcon returnImage(int selection)
 	{
