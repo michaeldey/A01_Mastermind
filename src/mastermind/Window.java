@@ -21,7 +21,7 @@ public class Window extends JFrame implements ActionListener{
 	ActionListener listener;
 	
 	Container contentPane = getContentPane();			//overall window
-	JPanel grid = new JPanel(new GridLayout(3,1)); 	//Holds Codemaster, 10 guesses, and userTools
+	JPanel grid = new JPanel(); 	//Holds Codemaster, 10 guesses, and userTools
 	JLabel codeMaster = new JLabel("Code Master");		//Holds Codemaster object
 	JPanel guessContainer = new JPanel(new GridLayout(10,4));
 	JPanel userTools =  new JPanel(new GridLayout(1,2)); //holds a grid 1 tall 2 wide
@@ -43,7 +43,7 @@ public class Window extends JFrame implements ActionListener{
 	public Window()
 	{
 		super("MasterMind Game");
-		setSize(700,1000);
+		setSize(500,700);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		
@@ -52,14 +52,15 @@ public class Window extends JFrame implements ActionListener{
 		codeMaster.setFont(new Font("Tahoma", Font.BOLD, 18));
 		codeMaster.setHorizontalAlignment(SwingConstants.CENTER);		
 		grid.setBackground(new Color(255, 204, 153));
+		grid.setLayout(new BorderLayout());
 		
-		grid.add(codeMaster);		
+		grid.add("North", codeMaster);		
 		
 		
 		//********Panels 1 - 10 GuessSection Objects***********
 		
-		//seed userGuesses with GuessSection Objects	
-		guessContainer.setSize(1000,1000);
+
+
 
 		for (int i = 0; i < marbleButtonArray.length; i++)
 		{
@@ -72,13 +73,12 @@ public class Window extends JFrame implements ActionListener{
 				marbleButtonArray[i][j].setIcon(getIcon(0));			//make the image a blank peg
 				marbleButtonArray[i][j].setContentAreaFilled(false);	//clear the gradient and stroke from button
 				marbleButtonArray[i][j].setBorder(null);				//clear border from button
-				marbleButtonArray[i][j].setPreferredSize(new Dimension (400, 400));
 				guessContainer.add(marbleButtonArray[i][j]);
 			}
 		}
 		
 
-		grid.add(guessContainer);
+		grid.add("Center", guessContainer);
 		
 		
 		
@@ -95,7 +95,7 @@ public class Window extends JFrame implements ActionListener{
 		
 		userTools.add(submitBtn);							//add the submit button
 		submitBtn.addActionListener(this);					//add an actionListener for the button
-		grid.add(userTools);								//add userTools to the grid
+		grid.add("South", userTools);								//add userTools to the grid
 		
 		
 		contentPane.add("Center", grid);					//display grid in the center pane
