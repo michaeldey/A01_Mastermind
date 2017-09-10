@@ -8,26 +8,31 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Window extends JFrame implements ActionListener{
+	
+	//set up images
+	ImageIcon marbleHole = new ImageIcon(Window.class.getResource("/images/Circle_Hole_843505.png"));
+	ImageIcon marbleBlue = new ImageIcon(Window.class.getResource("/images/Circle_Blue.png"));
+	ImageIcon marbleGreen = new ImageIcon(Window.class.getResource("/images/Circle_Green.png"));
+	ImageIcon marbleRed = new ImageIcon(Window.class.getResource("/images/Circle_Red.png"));
+	ImageIcon marbleWhite = new ImageIcon(Window.class.getResource("/images/Circle_White.png"));
+	ImageIcon marbleYellow = new ImageIcon(Window.class.getResource("/images/Circle_Yellow.png"));
+	ImageIcon marbleBlack = new ImageIcon(Window.class.getResource("/images/Circle_Black.png"));
 
 	ActionListener listener;
 	
 	Container contentPane = getContentPane();			//overall window
 	JPanel grid = new JPanel(new GridLayout(12,1)); 	//Holds Codemaster, 10 guesses, and userTools
 	JLabel codeMaster = new JLabel("Code Master");		//Holds Codemaster object
-	//GuessSection[] userGuesses = new GuessSection[10];	//Holds user guesses (10 GuessSection objects)
-	JPanel guessSection = new JPanel(new GridLayout(10,1));	
-	JPanel[] guessContainer = new JPanel[10];
+
 	JPanel userTools =  new JPanel(new GridLayout(1,2)); //holds a grid 1 tall 2 wide
 	ColorSelect colorSelect = new ColorSelect(listener);		//create a ColorSelect object
 	JButton submitBtn = new JButton("Submit");					//submit button
-	JButton tempMarbleBtn;
-	Marble tempMarble = new Marble();
-	UserGuessContainer container01 = new UserGuessContainer();
 	
 	int currentSelectedColor = 0;
-	JButton[][] newGuesses = new JButton[10][4];
 	
-//	JLabel woodBKG = new JLabel(new ImageIcon("/images/woodBKG.png"));
+	JButton[][] newGuesses = new JButton[10][4]; //array of user guess buttons
+	
+
 	
 	Marble[][] userMarbleGuess = new Marble[10][4]; //individual marble guesses (10 guesses x 4 marbles)
 	
@@ -50,55 +55,28 @@ public class Window extends JFrame implements ActionListener{
 		
 		//********Panels 1 - 10 GuessSection Objects***********
 		
-		//seed userGuesses with GuessSection Objects
-//		for (GuessSection m : userGuesses)
-//		{
-//			m = new GuessSection();
-//			JButton[] foo = m.getMarbles();
-////			for (JButton f : foo)
-////			{
-////				grid.add(f);
-////			}
-//			
-//		}
-		
-		/*
-		 * Create User guess objects (marbles) 
-		 * userMarbleGuess[10][4] holds 10 guesses x 4 marbles = 40 marbles
-		 * guessContainer[10] holds 10 userMarbleGuess in sets of 4
-		 * 
-		 */
-//		for (int i = 0; i < userMarbleGuess.length; i++)
-//		{
-//			guessContainer[i] = new JPanel(new GridLayout(1,4));
-//			for (int j = 0; j < userMarbleGuess[0].length; j++)
-//			{
-//				userMarbleGuess[i][j] = new Marble();
-//				guessContainer[i].add(userMarbleGuess[i][j].getButton());
-//				userMarbleGuess[i][j].getButton().addActionListener(this);
-//			}
-//			//userMarbleGuess[0][0].getButton().addActionListener(this);
-//			grid.add(guessContainer[i]);
-//		}
-//				
-//		tempMarble = new Marble();
-//		tempMarbleBtn = tempMarble.getButton();
-//		tempMarbleBtn.addActionListener(this);
-//		grid.add(tempMarbleBtn);
-		
+		//seed userGuesses with GuessSection Objects	
 		JPanel guessContainer = new JPanel(new GridLayout(10,4));
 		for (int i = 0; i < newGuesses.length; i++)
 		{
 			for (int j = 0; j < newGuesses[0].length; j++)
 			{
-				newGuesses[i][j] = new JButton("Button");
+				newGuesses[i][j] = new JButton();
 				guessContainer.add(newGuesses[i][j]);
 				newGuesses[i][j].addActionListener(this);
+				
+				newGuesses[i][j].setIcon(getIcon(0));			//make the image a blank peg
+				newGuesses[i][j].setContentAreaFilled(false);	//clear the gradient and stroke from button
+				newGuesses[i][j].setBorder(null);				//clear border from button
 			}
 		}
 		
 
 		grid.add(guessContainer);
+		
+		
+		
+		
 		//*********Panel 11 Color Selection and Submit Button******
 		userTools.add(colorSelect.getColorGrid());
 		
@@ -135,27 +113,37 @@ public class Window extends JFrame implements ActionListener{
 		{
 			for (int j = 0; j<newGuesses[0].length; j++)
 			{
-				if (event.getSource()==newGuesses[i][j]) System.out.println("new guesses " + i + " " + j + " clicked");
+				if (event.getSource()==newGuesses[i][j])
+					{
+						newGuesses[i][j].setIcon(getIcon(currentSelectedColor));
+					}
 			}
 		}
 
-		
-		
-		
-		
 
-//		for (int i = 0; i < userMarbleGuess.length; i++)
-//		{
-//			for (int j = 0; j < userMarbleGuess[0].length; j++)
-//			{
-//				if (event.getSource()==userMarbleGuess[i][j]) System.out.println("Guess " + i + ", " + " j");
-//			}
-//		}
-		
-		//System.out.println(event);
 		
 	}
 
+	private ImageIcon getIcon(int current)
+	{
+		switch (current)
+		{
+		case 1:
+			return marbleBlue;
+		case 2:
+			return marbleGreen;
+		case 3:
+			return marbleRed;
+		case 4:
+			return marbleWhite;
+		case 5:
+			return marbleYellow;
+		case 6:
+			return marbleBlack;
+		default:
+			return marbleHole;
+		}
+	}
 
 }//end of Window Class
 
