@@ -21,9 +21,9 @@ public class Window extends JFrame implements ActionListener{
 	ActionListener listener;
 	
 	Container contentPane = getContentPane();			//overall window
-	JPanel grid = new JPanel(new GridLayout(12,1)); 	//Holds Codemaster, 10 guesses, and userTools
+	JPanel grid = new JPanel(new GridLayout(3,1)); 	//Holds Codemaster, 10 guesses, and userTools
 	JLabel codeMaster = new JLabel("Code Master");		//Holds Codemaster object
-
+	JPanel guessContainer = new JPanel(new GridLayout(10,4));
 	JPanel userTools =  new JPanel(new GridLayout(1,2)); //holds a grid 1 tall 2 wide
 	ColorSelect colorSelect = new ColorSelect(listener);		//create a ColorSelect object
 	JButton submitBtn = new JButton("Submit");					//submit button
@@ -59,19 +59,21 @@ public class Window extends JFrame implements ActionListener{
 		//********Panels 1 - 10 GuessSection Objects***********
 		
 		//seed userGuesses with GuessSection Objects	
-		JPanel guessContainer = new JPanel(new GridLayout(10,4));
-		guessContainer.setPreferredSize(new Dimension(500, 700));
+		guessContainer.setSize(1000,1000);
+
 		for (int i = 0; i < marbleButtonArray.length; i++)
 		{
 			for (int j = 0; j < marbleButtonArray[0].length; j++)
 			{
 				marbleButtonArray[i][j] = new JButton();
-				guessContainer.add(marbleButtonArray[i][j]);
+				
 				marbleButtonArray[i][j].addActionListener(this);
 				
 				marbleButtonArray[i][j].setIcon(getIcon(0));			//make the image a blank peg
 				marbleButtonArray[i][j].setContentAreaFilled(false);	//clear the gradient and stroke from button
 				marbleButtonArray[i][j].setBorder(null);				//clear border from button
+				marbleButtonArray[i][j].setPreferredSize(new Dimension (400, 400));
+				guessContainer.add(marbleButtonArray[i][j]);
 			}
 		}
 		
@@ -194,4 +196,3 @@ public class Window extends JFrame implements ActionListener{
 	}
 
 }//end of Window Class
-
