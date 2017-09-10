@@ -1,4 +1,4 @@
-package wip_A01_Mastermind;
+package mastermind;
 
 import java.util.Scanner;
 

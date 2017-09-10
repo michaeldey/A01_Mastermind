@@ -15,8 +15,9 @@ public class ColorSelect extends JFrame {
 	ImageIcon marbleRed = new ImageIcon(Window.class.getResource("/images/Circle_Red.png"));
 	ImageIcon marbleWhite = new ImageIcon(Window.class.getResource("/images/Circle_White.png"));
 	ImageIcon marbleYellow = new ImageIcon(Window.class.getResource("/images/Circle_Yellow.png"));
+	ImageIcon marbleBlack = new ImageIcon(Window.class.getResource("/images/Circle_Black.png"));
 	ImageIcon marbleHole = new ImageIcon(Window.class.getResource("/images/Circle_Hole_843505.png"));
-	ImageIcon[] images = new ImageIcon[]{marbleBlue, marbleGreen, marbleRed, marbleWhite, marbleYellow, marbleHole};
+	ImageIcon[] images = new ImageIcon[]{marbleBlue, marbleGreen, marbleRed, marbleWhite, marbleYellow, marbleBlack, marbleHole};
 	
 	private JPanel colorGrid = new JPanel(new GridLayout(1,7));	//new JPanel 6 wide, 1 tall
 	public JButton[] buttons = new JButton[images.length];
@@ -68,6 +69,8 @@ public class ColorSelect extends JFrame {
 			return marbleWhite;
 		case 5:
 			return marbleYellow;
+		case 6:
+			return marbleBlack;
 		default:
 			return marbleHole;
 		}

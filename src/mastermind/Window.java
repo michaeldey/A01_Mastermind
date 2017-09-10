@@ -20,11 +20,18 @@ public class Window extends JFrame implements ActionListener{
 	JPanel userTools =  new JPanel(new GridLayout(1,2)); //holds a grid 1 tall 2 wide
 	ColorSelect colorSelect = new ColorSelect(listener);		//create a ColorSelect object
 	JButton submitBtn = new JButton("Submit");					//submit button
+	JButton tempMarbleBtn;
+	Marble tempMarble = new Marble();
+	UserGuessContainer container01 = new UserGuessContainer();
+	
+	int currentSelectedColor = 0;
+	JButton[] newGuesses = new JButton[4];
 	
 //	JLabel woodBKG = new JLabel(new ImageIcon("/images/woodBKG.png"));
 	
 	Marble[][] userMarbleGuess = new Marble[10][4]; //individual marble guesses (10 guesses x 4 marbles)
 	
+
 	public Window()
 	{
 		super("MasterMind Game");
@@ -61,22 +68,34 @@ public class Window extends JFrame implements ActionListener{
 		 * guessContainer[10] holds 10 userMarbleGuess in sets of 4
 		 * 
 		 */
-		for (int i = 0; i < userMarbleGuess.length; i++)
-		{
-			guessContainer[i] = new JPanel(new GridLayout(1,4));
-			for (int j = 0; j < userMarbleGuess[0].length; j++)
-			{
-				userMarbleGuess[i][j] = new Marble();
-				guessContainer[i].add(userMarbleGuess[i][j].getButton());
+//		for (int i = 0; i < userMarbleGuess.length; i++)
+//		{
+//			guessContainer[i] = new JPanel(new GridLayout(1,4));
+//			for (int j = 0; j < userMarbleGuess[0].length; j++)
+//			{
+//				userMarbleGuess[i][j] = new Marble();
+//				guessContainer[i].add(userMarbleGuess[i][j].getButton());
 //				userMarbleGuess[i][j].getButton().addActionListener(this);
-			}
-			userMarbleGuess[0][0].getButton().addActionListener(this);
-			grid.add(guessContainer[i]);
+//			}
+//			//userMarbleGuess[0][0].getButton().addActionListener(this);
+//			grid.add(guessContainer[i]);
+//		}
+//				
+//		tempMarble = new Marble();
+//		tempMarbleBtn = tempMarble.getButton();
+//		tempMarbleBtn.addActionListener(this);
+//		grid.add(tempMarbleBtn);
+		
+		JPanel guessContainer = new JPanel(new GridLayout(1,4));
+		for (int i = 0; i < newGuesses.length; i++)
+		{
+			newGuesses[i] = new JButton("Button");
+			guessContainer.add(newGuesses[i]);
+			newGuesses[i].addActionListener(this);
 		}
-				
 		
-		
-		
+
+		grid.add(guessContainer);
 		//*********Panel 11 Color Selection and Submit Button******
 		userTools.add(colorSelect.getColorGrid());
 		
@@ -101,13 +120,23 @@ public class Window extends JFrame implements ActionListener{
 	{
 		if (event.getSource()==submitBtn) System.out.println("Submit was pressed");		
 		
-		if (event.getSource()==colorSelect.buttons[0]) System.out.println("Blue");
-		if (event.getSource()==colorSelect.buttons[1]) System.out.println("Green");
-		if (event.getSource()==colorSelect.buttons[2]) System.out.println("Red");
-		if (event.getSource()==colorSelect.buttons[3]) System.out.println("White");
-		if (event.getSource()==colorSelect.buttons[4]) System.out.println("Yellow");
-		if (event.getSource()==colorSelect.buttons[5]) System.out.println("Blank");
-		if (event.getSource()==userMarbleGuess[0][0]) System.out.println("Guess 0,0");
+		if (event.getSource()==colorSelect.buttons[0]) currentSelectedColor=1;
+		if (event.getSource()==colorSelect.buttons[1]) currentSelectedColor=2;
+		if (event.getSource()==colorSelect.buttons[2]) currentSelectedColor=3;
+		if (event.getSource()==colorSelect.buttons[3]) currentSelectedColor=4;
+		if (event.getSource()==colorSelect.buttons[4]) currentSelectedColor=5;
+		if (event.getSource()==colorSelect.buttons[5]) currentSelectedColor=6;
+		if (event.getSource()==colorSelect.buttons[6]) currentSelectedColor=0;
+		System.out.println(currentSelectedColor);
+		for (int i = 0; i < newGuesses.length; i++)
+		{
+			if (event.getSource()==newGuesses[i]) System.out.println("new guesses " + i + " clicked");
+		}
+
+		
+		
+		
+		
 
 //		for (int i = 0; i < userMarbleGuess.length; i++)
 //		{
