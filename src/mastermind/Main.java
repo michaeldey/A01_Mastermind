@@ -1,4 +1,4 @@
-package sandbox;
+package mastermind;
 
 public class Main {
 
