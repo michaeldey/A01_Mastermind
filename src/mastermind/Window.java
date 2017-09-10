@@ -28,13 +28,16 @@ public class Window extends JFrame implements ActionListener{
 	ColorSelect colorSelect = new ColorSelect(listener);		//create a ColorSelect object
 	JButton submitBtn = new JButton("Submit");					//submit button
 	
-	int currentSelectedColor = 0;
+	int currentSelectedColor = 7;
 	
-	JButton[][] newGuesses = new JButton[10][4]; //array of user guess buttons
+	JButton[][] marbleButtonArray = new JButton[10][4]; //array of user guess buttons
+	int[] userGuess = new int[4];
 	
-
+	int guessTurn = 0;
 	
 	Marble[][] userMarbleGuess = new Marble[10][4]; //individual marble guesses (10 guesses x 4 marbles)
+	
+	Colors[] ColorsGuess = new Colors[4];
 	
 
 	public Window()
@@ -57,17 +60,18 @@ public class Window extends JFrame implements ActionListener{
 		
 		//seed userGuesses with GuessSection Objects	
 		JPanel guessContainer = new JPanel(new GridLayout(10,4));
-		for (int i = 0; i < newGuesses.length; i++)
+		guessContainer.setPreferredSize(new Dimension(500, 700));
+		for (int i = 0; i < marbleButtonArray.length; i++)
 		{
-			for (int j = 0; j < newGuesses[0].length; j++)
+			for (int j = 0; j < marbleButtonArray[0].length; j++)
 			{
-				newGuesses[i][j] = new JButton();
-				guessContainer.add(newGuesses[i][j]);
-				newGuesses[i][j].addActionListener(this);
+				marbleButtonArray[i][j] = new JButton();
+				guessContainer.add(marbleButtonArray[i][j]);
+				marbleButtonArray[i][j].addActionListener(this);
 				
-				newGuesses[i][j].setIcon(getIcon(0));			//make the image a blank peg
-				newGuesses[i][j].setContentAreaFilled(false);	//clear the gradient and stroke from button
-				newGuesses[i][j].setBorder(null);				//clear border from button
+				marbleButtonArray[i][j].setIcon(getIcon(0));			//make the image a blank peg
+				marbleButtonArray[i][j].setContentAreaFilled(false);	//clear the gradient and stroke from button
+				marbleButtonArray[i][j].setBorder(null);				//clear border from button
 			}
 		}
 		
@@ -99,7 +103,25 @@ public class Window extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
-		if (event.getSource()==submitBtn) System.out.println("Submit was pressed");		
+		if (event.getSource()==submitBtn)
+			{	
+				int count = 0;
+				for (int i = 0; i < userGuess.length; i++)
+				{
+					if (userGuess[i]!=7&&userGuess[i]!=0) count++;
+				}
+				if (count == 4)
+				{
+					sendColorsGuess();
+					guessTurn++;
+					
+					//reset userGuess[]
+					for (int i = 0; i < userGuess.length; i++)
+					{
+						userGuess[i] = 7;
+					}
+				}
+			}
 		
 		if (event.getSource()==colorSelect.buttons[0]) currentSelectedColor=1;
 		if (event.getSource()==colorSelect.buttons[1]) currentSelectedColor=2;
@@ -107,23 +129,49 @@ public class Window extends JFrame implements ActionListener{
 		if (event.getSource()==colorSelect.buttons[3]) currentSelectedColor=4;
 		if (event.getSource()==colorSelect.buttons[4]) currentSelectedColor=5;
 		if (event.getSource()==colorSelect.buttons[5]) currentSelectedColor=6;
-		if (event.getSource()==colorSelect.buttons[6]) currentSelectedColor=0;
-		System.out.println(currentSelectedColor);
-		for (int i = 0; i < newGuesses.length; i++)
+		if (event.getSource()==colorSelect.buttons[6]) currentSelectedColor=7;//blank
+
+		for (int i = 0; i < marbleButtonArray.length; i++)
 		{
-			for (int j = 0; j<newGuesses[0].length; j++)
+			for (int j = 0; j<marbleButtonArray[0].length; j++)
 			{
-				if (event.getSource()==newGuesses[i][j])
+				if (event.getSource()==marbleButtonArray[i][j])
 					{
-						newGuesses[i][j].setIcon(getIcon(currentSelectedColor));
+						if (i == guessTurn)
+						{
+							marbleButtonArray[i][j].setIcon(getIcon(currentSelectedColor));
+							userGuess[j] = currentSelectedColor;
+						}
+						
 					}
 			}
 		}
 
+		System.out.print("User array: ");
+		for (int t : userGuess)
+		{
+			System.out.print(t + " ");
+		}
+		System.out.println();
 
 		
 	}
 
+	public void sendColorsGuess()
+	{
+		System.out.print("Sending userGuess values");
+		for (int i = 0; i < userGuess.length; i++)
+		{
+			System.out.print(userGuess[i] + " ");
+			ColorsGuess[i] = Colors.values()[userGuess[i]-1];
+		}
+		System.out.println();
+		for (int i = 0; i < ColorsGuess.length; i++)
+		{
+			System.out.println(ColorsGuess[i]);
+		}
+	}
+	
 	private ImageIcon getIcon(int current)
 	{
 		switch (current)

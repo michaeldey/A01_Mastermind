@@ -6,6 +6,8 @@ public class Application_Test {
 	
 	public static void main(String[] args){
 		
+
+		
 		//create the objects
 		CodeMaster maestro = new CodeMaster();
 		Marble_Slot marbles = new Marble_Slot();
@@ -20,6 +22,11 @@ public class Application_Test {
 		
 		//do while loop to keep guesses going
 		do{
+			for (Colors c : maestro.getAnswer())
+			{
+				System.out.println(c);
+			}
+			
 			
 			//Prompt user
 			System.out.println("Colors: RED, YELLOW, BLUE, GREEN, WHITE, BLACK");
