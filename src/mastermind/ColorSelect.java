@@ -10,13 +10,13 @@ import java.awt.event.*;
 public class ColorSelect extends JFrame {
 
 	//set up images
-	ImageIcon pegBlue = new ImageIcon(Window.class.getResource("/images/Circle_Blue.png"));
-	ImageIcon pegGreen = new ImageIcon(Window.class.getResource("/images/Circle_Green.png"));
-	ImageIcon pegRed = new ImageIcon(Window.class.getResource("/images/Circle_Red.png"));
-	ImageIcon pegWhite = new ImageIcon(Window.class.getResource("/images/Circle_White.png"));
-	ImageIcon pegYellow = new ImageIcon(Window.class.getResource("/images/Circle_Yellow.png"));
-	ImageIcon pegHole = new ImageIcon(Window.class.getResource("/images/Circle_Hole_843505.png"));
-	ImageIcon[] images = new ImageIcon[]{pegBlue, pegGreen, pegRed, pegWhite, pegYellow, pegHole};
+	ImageIcon marbleBlue = new ImageIcon(Window.class.getResource("/images/Circle_Blue.png"));
+	ImageIcon marbleGreen = new ImageIcon(Window.class.getResource("/images/Circle_Green.png"));
+	ImageIcon marbleRed = new ImageIcon(Window.class.getResource("/images/Circle_Red.png"));
+	ImageIcon marbleWhite = new ImageIcon(Window.class.getResource("/images/Circle_White.png"));
+	ImageIcon marbleYellow = new ImageIcon(Window.class.getResource("/images/Circle_Yellow.png"));
+	ImageIcon marbleHole = new ImageIcon(Window.class.getResource("/images/Circle_Hole_843505.png"));
+	ImageIcon[] images = new ImageIcon[]{marbleBlue, marbleGreen, marbleRed, marbleWhite, marbleYellow, marbleHole};
 	
 	private JPanel colorGrid = new JPanel(new GridLayout(1,7));	//new JPanel 6 wide, 1 tall
 	public JButton[] buttons = new JButton[images.length];
@@ -58,18 +58,18 @@ public class ColorSelect extends JFrame {
 	{
 		switch (selection)
 		{
-		case 0:
-			return pegBlue;
 		case 1:
-			return pegGreen;
+			return marbleBlue;
 		case 2:
-			return pegRed;
+			return marbleGreen;
 		case 3:
-			return pegWhite;
+			return marbleRed;
 		case 4:
-			return pegYellow;
+			return marbleWhite;
+		case 5:
+			return marbleYellow;
 		default:
-			return pegHole;
+			return marbleHole;
 		}
 	}
 	
