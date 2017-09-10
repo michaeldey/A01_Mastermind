@@ -25,7 +25,7 @@ public class Window extends JFrame implements ActionListener{
 	UserGuessContainer container01 = new UserGuessContainer();
 	
 	int currentSelectedColor = 0;
-	JButton[] newGuesses = new JButton[4];
+	JButton[][] newGuesses = new JButton[10][4];
 	
 //	JLabel woodBKG = new JLabel(new ImageIcon("/images/woodBKG.png"));
 	
@@ -86,12 +86,15 @@ public class Window extends JFrame implements ActionListener{
 //		tempMarbleBtn.addActionListener(this);
 //		grid.add(tempMarbleBtn);
 		
-		JPanel guessContainer = new JPanel(new GridLayout(1,4));
+		JPanel guessContainer = new JPanel(new GridLayout(10,4));
 		for (int i = 0; i < newGuesses.length; i++)
 		{
-			newGuesses[i] = new JButton("Button");
-			guessContainer.add(newGuesses[i]);
-			newGuesses[i].addActionListener(this);
+			for (int j = 0; j < newGuesses[0].length; j++)
+			{
+				newGuesses[i][j] = new JButton("Button");
+				guessContainer.add(newGuesses[i][j]);
+				newGuesses[i][j].addActionListener(this);
+			}
 		}
 		
 
@@ -130,7 +133,10 @@ public class Window extends JFrame implements ActionListener{
 		System.out.println(currentSelectedColor);
 		for (int i = 0; i < newGuesses.length; i++)
 		{
-			if (event.getSource()==newGuesses[i]) System.out.println("new guesses " + i + " clicked");
+			for (int j = 0; j<newGuesses[0].length; j++)
+			{
+				if (event.getSource()==newGuesses[i][j]) System.out.println("new guesses " + i + " " + j + " clicked");
+			}
 		}
 
 		
