@@ -7,7 +7,7 @@ import mastermind.Window;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Window extends JFrame implements ActionListener{
+public class Window extends JFrame implements ActionListener, MouseMotionListener{
 	
 	//set up images
 	ImageIcon marbleHole = new ImageIcon(Window.class.getResource("/images/Circle_Hole_843505.png"));
@@ -16,14 +16,19 @@ public class Window extends JFrame implements ActionListener{
 	ImageIcon marbleRed = new ImageIcon(Window.class.getResource("/images/Circle_Red.png"));
 	ImageIcon marbleWhite = new ImageIcon(Window.class.getResource("/images/Circle_White.png"));
 	ImageIcon marbleYellow = new ImageIcon(Window.class.getResource("/images/Circle_Yellow.png"));
-	ImageIcon marbleBlack = new ImageIcon(Window.class.getResource("/images/Circle_Black.png"));
+	ImageIcon marbleBlack = new ImageIcon(Window.class.getResource("/images/Circle_Black.png"));	
+	ImageIcon pegBlack = new ImageIcon(Window.class.getResource("/images/Peg_Black.png"));
+	ImageIcon pegWhite = new ImageIcon(Window.class.getResource("/images/Peg_White.png"));
+	ImageIcon pegHole = new ImageIcon(Window.class.getResource("/images/Peg_Hole.png"));
 
+	//add the ActionListener object
 	ActionListener listener;
 	
 	Container contentPane = getContentPane();			//overall window
 	JPanel grid = new JPanel(); 	//Holds Codemaster, 10 guesses, and userTools
 	JLabel codeMaster = new JLabel("Code Master");		//Holds Codemaster object
 	JPanel guessContainer = new JPanel(new GridLayout(10,4));
+	JPanel[] pegContainer = new JPanel[10];
 	JPanel userTools =  new JPanel(new GridLayout(1,2)); //holds a grid 1 tall 2 wide
 	ColorSelect colorSelect = new ColorSelect(listener);		//create a ColorSelect object
 	JButton submitBtn = new JButton("Submit");					//submit button
@@ -31,14 +36,17 @@ public class Window extends JFrame implements ActionListener{
 	int currentSelectedColor = 7;
 	
 	JButton[][] marbleButtonArray = new JButton[10][4]; //array of user guess buttons
+	JLabel[][] pegImages = new JLabel[10][4]; //individual feedback for guesses (10 guesses x 4 pegs)
+	
 	int[] userGuess = new int[4];
+	int[] FeedbackReturn = new int[4]; 			//Garret
 	
-	int guessTurn = 0;
-	
-	Marble[][] userMarbleGuess = new Marble[10][4]; //individual marble guesses (10 guesses x 4 marbles)
+	int guessTurn = 0;	
 	
 	Colors[] ColorsGuess = new Colors[4];
 	
+	int mouseX, mouseY;
+	JLabel mouseImage = new JLabel();
 
 	public Window()
 	{
@@ -46,6 +54,9 @@ public class Window extends JFrame implements ActionListener{
 		setSize(500,700);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
+		//add the mouse listener
+		grid.addMouseMotionListener(this);
+		mouseImage.setIcon(marbleRed);
 		
 		
 		//************ Panel 0 Code Master Object**************
@@ -66,15 +77,23 @@ public class Window extends JFrame implements ActionListener{
 		{
 			for (int j = 0; j < marbleButtonArray[0].length; j++)
 			{
-				marbleButtonArray[i][j] = new JButton();
-				
-				marbleButtonArray[i][j].addActionListener(this);
-				
+				marbleButtonArray[i][j] = new JButton();				
+				marbleButtonArray[i][j].addActionListener(this);				
 				marbleButtonArray[i][j].setIcon(getIcon(0));			//make the image a blank peg
 				marbleButtonArray[i][j].setContentAreaFilled(false);	//clear the gradient and stroke from button
 				marbleButtonArray[i][j].setBorder(null);				//clear border from button
 				guessContainer.add(marbleButtonArray[i][j]);
 			}
+			
+			//add the pegContainer that holds 2x2 JLabel pegImages
+			pegContainer[i] = new JPanel(new GridLayout(2,2)); //set up the 2x2 peg container
+			for (int k = 0; k < pegImages[0].length; k++)
+			{
+				pegImages[i][k]=new JLabel();
+				pegImages[i][k].setIcon(pegHole);
+				pegContainer[i].add(pegImages[i][k]);
+			}
+			guessContainer.add(pegContainer[i]);
 		}
 		
 
@@ -125,7 +144,10 @@ public class Window extends JFrame implements ActionListener{
 				}
 			}
 		
-		if (event.getSource()==colorSelect.buttons[0]) currentSelectedColor=1;
+		if (event.getSource()==colorSelect.buttons[0])
+		{
+			currentSelectedColor=1;			
+		}
 		if (event.getSource()==colorSelect.buttons[1]) currentSelectedColor=2;
 		if (event.getSource()==colorSelect.buttons[2]) currentSelectedColor=3;
 		if (event.getSource()==colorSelect.buttons[3]) currentSelectedColor=4;
@@ -161,16 +183,17 @@ public class Window extends JFrame implements ActionListener{
 
 	public void sendColorsGuess()
 	{
-		System.out.print("Sending userGuess values");
+//		System.out.print("Sending userGuess values");
 		for (int i = 0; i < userGuess.length; i++)
 		{
-			System.out.print(userGuess[i] + " ");
+//			System.out.print(userGuess[i] + " ");
 			ColorsGuess[i] = Colors.values()[userGuess[i]-1];
 		}
-		System.out.println();
+//		System.out.println();
 		for (int i = 0; i < ColorsGuess.length; i++)
 		{
-			System.out.println(ColorsGuess[i]);
+//			System.out.println(ColorsGuess[i]);
+			//FeedbackReturn= Feedback.getPegArray(); //0 = blank, 1 = white, 2 = black
 		}
 	}
 	
@@ -193,6 +216,20 @@ public class Window extends JFrame implements ActionListener{
 		default:
 			return marbleHole;
 		}
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		mouseX = e.getX();
+		mouseY = e.getY();
+		mouseImage.setLocation(mouseY, mouseY);
+		
 	}
 
 }//end of Window Class
