@@ -73,4 +73,26 @@ public class Feedback {
 		this.whiteCorrect = whitePegs - this.blackCorrect;
 	}
 	
+	/**
+	 * Method to give an array of Pegs with correct number of black/white pegs
+	 */
+	public Pegs[] getPegArray (int b, int w){
+		Pegs[] pegArray = {};
+		ArrayList<Pegs> pegList = new ArrayList<Pegs>(Arrays.asList(pegArray));
+		for(int i = 0; i < b; i++){
+			pegList.add(Pegs.BLACK);
+		}
+		
+		for(int j = 0; j < w; j++){
+			pegList.add(Pegs.WHITE);
+		}
+		
+		while(pegList.size() < 4){
+			pegList.add(Pegs.BLANK);
+		}
+		
+		pegArray = pegList.toArray(new Pegs[pegList.size()]);
+		return pegArray;
+	}
+	
 }
