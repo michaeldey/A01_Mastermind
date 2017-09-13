@@ -1,5 +1,8 @@
 package mastermind;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Feedback {
 	//Field declarations.
 	private int guessTurn = 1;

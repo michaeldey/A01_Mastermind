@@ -9,6 +9,8 @@ import java.awt.event.*;
 
 public class Window extends JFrame implements ActionListener, MouseMotionListener{
 	
+	CodeMaster master = new CodeMaster(); //set up the CodeMaster to drive the back end logic
+	
 	//set up images
 	ImageIcon marbleHole = new ImageIcon(Window.class.getResource("/images/Circle_Hole_843505.png"));
 	ImageIcon marbleBlue = new ImageIcon(Window.class.getResource("/images/Circle_Blue.png"));
@@ -24,32 +26,35 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	//add the ActionListener object
 	ActionListener listener;
 	
-	Container contentPane = getContentPane();			//overall window
-	JPanel grid = new JPanel(); 	//Holds Codemaster, 10 guesses, and userTools
-	JLabel codeMaster = new JLabel("Code Master");		//Holds Codemaster object
+	Container contentPane = getContentPane();				//overall window
+	JPanel grid = new JPanel(); 							//Holds Codemaster, 10 guesses, and userTools
+	JLabel computersGuess = new JLabel("Code Master");			//Holds Codemaster object
 	JPanel guessContainer = new JPanel(new GridLayout(10,4));
 	JPanel[] pegContainer = new JPanel[10];
-	JPanel userTools =  new JPanel(new GridLayout(1,2)); //holds a grid 1 tall 2 wide
-	ColorSelect colorSelect = new ColorSelect(listener);		//create a ColorSelect object
-	JButton submitBtn = new JButton("Submit");					//submit button
+	JPanel userTools =  new JPanel(new GridLayout(1,2)); 	//holds a grid 1 tall 2 wide
+	ColorSelect colorSelect = new ColorSelect(listener);	//create a ColorSelect object
+	JButton submitBtn = new JButton("Submit");				//submit button
 	
-	int currentSelectedColor = 7;
+	int currentSelectedColor = 7;							//7 is the default for blank marbles
 	
-	JButton[][] marbleButtonArray = new JButton[10][4]; //array of user guess buttons
-	JLabel[][] pegImages = new JLabel[10][4]; //individual feedback for guesses (10 guesses x 4 pegs)
+	JButton[][] marbleButtonArray = new JButton[10][4]; 	//array of user guess buttons (10 guesses x 4 marbles)
+	JLabel[][] pegImages = new JLabel[10][4]; 				//individual feedback for guesses (10 guesses x 4 pegs)
 	
-	int[] userGuess = new int[4];
-	int[] FeedbackReturn = new int[4]; 			//Garret
+	int[] userGuess = new int[4];			// int array that is sent to CodeMaster to check against random code
+	int[] FeedbackReturn = new int[4]; 		// int array returned that represents the feedback pegs
 	
-	int guessTurn = 0;	
+	int guessTurn = 0;						//initialize the guesses at 0
 	
 	Colors[] ColorsGuess = new Colors[4];
 	
-	int mouseX, mouseY;
-	JLabel mouseImage = new JLabel();
+	int mouseX, mouseY;					//this is used for mouse movement events
+	JLabel mouseImage = new JLabel();	//this holds the image of the selected color
+	
+	
 
 	public Window()
 	{
+		//set up the window
 		super("MasterMind Game");
 		setSize(500,700);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -60,12 +65,12 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		
 		
 		//************ Panel 0 Code Master Object**************
-		codeMaster.setFont(new Font("Tahoma", Font.BOLD, 18));
-		codeMaster.setHorizontalAlignment(SwingConstants.CENTER);		
+		computersGuess.setFont(new Font("Tahoma", Font.BOLD, 18));
+		computersGuess.setHorizontalAlignment(SwingConstants.CENTER);		
 		grid.setBackground(new Color(255, 204, 153));
 		grid.setLayout(new BorderLayout());
 		
-		grid.add("North", codeMaster);		
+		grid.add("North", computersGuess);		
 		
 		
 		//********Panels 1 - 10 GuessSection Objects***********
