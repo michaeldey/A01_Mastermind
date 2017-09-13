@@ -9,7 +9,10 @@ import java.awt.event.*;
 
 public class Window extends JFrame implements ActionListener, MouseMotionListener{
 	
-	CodeMaster master = new CodeMaster(); //set up the CodeMaster to drive the back end logic
+	 //Declare objects to help with back-end logic
+	CodeMaster master = new CodeMaster();
+	Marble_Slot user = new Marble_Slot();
+	Feedback check = new Feedback();
 	
 	//set up images
 	ImageIcon marbleHole = new ImageIcon(Window.class.getResource("/images/Circle_Hole_843505.png"));
@@ -86,7 +89,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 			{
 				marbleButtonArray[i][j] = new JButton();				
 				marbleButtonArray[i][j].addActionListener(this);				
-				marbleButtonArray[i][j].setIcon(getIcon(0));			//make the image a blank peg
+				marbleButtonArray[i][j].setIcon(getMarbleIcon(0));			//make the image a blank peg
 				marbleButtonArray[i][j].setContentAreaFilled(false);	//clear the gradient and stroke from button
 				marbleButtonArray[i][j].setBorder(null);				//clear border from button
 				guessContainer.add(marbleButtonArray[i][j]);
@@ -141,20 +144,24 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		//Submit button actions
 		if (event.getSource()==submitBtn)
 			{	
-				int count = 0;
+				int count = 0;								//int to count valid input slots
+				
+				//cycle through all 4 user guesses and check that there are no blank guesses
 				for (int i = 0; i < userGuess.length; i++)
 				{
-					if (userGuess[i]!=7&&userGuess[i]!=0) count++;
+					// value of 7 or 0 means there is a blank guess
+					// if the curent guess is NOT blank, add 1 to count
+					if (userGuess[i]!=7&&userGuess[i]!=0) count++; 
 				}
-				if (count == 4)
+				if (count == 4) //4 means all 4 slots are filled with valid guesses
 				{
-					sendColorsGuess();
-					guessTurn++;
+					sendColorsGuess();	//sends the guess to the Feedback object
+					guessTurn++;		//iterate the guessTurn counter
 					
-					//reset userGuess[]
+					//reset userGuess[] for use in the next guess
 					for (int i = 0; i < userGuess.length; i++)
 					{
-						userGuess[i] = 7;
+						userGuess[i] = 7;	//set all slots to 7 to indicate they are blank
 					}
 				}
 			}
@@ -185,7 +192,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 					{
 						if (i == guessTurn)
 						{
-							marbleButtonArray[i][j].setIcon(getIcon(currentSelectedColor));
+							marbleButtonArray[i][j].setIcon(getMarbleIcon(currentSelectedColor));
 							userGuess[j] = currentSelectedColor;
 						}
 						
@@ -211,17 +218,37 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	 */
 	public void sendColorsGuess()
 	{
-//		System.out.print("Sending userGuess values");
+		//loop through values in userGuess[] and propagate them into ColorsGuess[]
 		for (int i = 0; i < userGuess.length; i++)
 		{
-//			System.out.print(userGuess[i] + " ");
 			ColorsGuess[i] = Colors.values()[userGuess[i]-1];
 		}
-//		System.out.println();
+		
+		//loop through ColorsGuess[]
 		for (int i = 0; i < ColorsGuess.length; i++)
 		{
-//			System.out.println(ColorsGuess[i]);
 			//FeedbackReturn= Feedback.getPegArray(); //0 = blank, 1 = white, 2 = black
+		}
+		
+		//set values of FeedbackReturn for testing
+		FeedbackReturn[0]=2;
+		FeedbackReturn[1]=1;
+		FeedbackReturn[2]=0;
+		FeedbackReturn[3]=0;
+		setFeedbackPegIcons(FeedbackReturn);
+	}
+	
+	/**
+	 * 
+	 * @param FBR is the FeedbackReturn[] propagated in sendColorsGuess()
+	 * This method loops through the JPanels representing the current guess'
+	 * feedback pegs and changes their icons to represent the proper feedback icons
+	 */
+	private void setFeedbackPegIcons(int[] FBR)
+	{
+		for (int i = 0; i < pegImages[guessTurn].length; i++) //loops through the 4 JPanels
+		{
+			pegImages[guessTurn][i].setIcon(getPegIcon(FBR[i])); //find the JPanel and sets the appropriate icon
 		}
 	}
 	
@@ -230,7 +257,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	 * @param current represents the int value of the current selected color
 	 * @return the ImageIcon associated with the current selected color
 	 */
-	private ImageIcon getIcon(int current)
+	private ImageIcon getMarbleIcon(int current)
 	{
 		switch (current)
 		{
@@ -251,6 +278,26 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		}
 	}
 
+	/**
+	 * 
+	 * @param pegNum represents the int value of the current selected peg
+	 * @return the ImageIcon associated with the current selected color
+	 * 
+	 * 0 = blank, 1 = white, 2 = black
+	 */
+	private ImageIcon getPegIcon(int pegNum)
+	{
+		switch (pegNum)
+		{
+		case 1:
+			return pegWhite;
+		case 2:
+			return pegBlack;
+		default:
+			return pegHole;
+		}
+	}
+	
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
