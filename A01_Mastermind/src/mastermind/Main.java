@@ -7,9 +7,9 @@ public class Main {
 		Window window = new Window();
 		window.master.setRandomAnswer();
 		
-		for(Colors el : window.master.getAnswer()){
-			System.out.println(el);
-		}
+//		for(Colors el : window.master.getAnswer()){
+//			System.out.println(el);
+//		}
 			
 		
 		//Don't want user array updated until submit is actually clicked...
@@ -19,7 +19,7 @@ public class Main {
 			window.check.whitePegNum(window.user.getGuess(), window.master.getAnswer());	
 		}
 				
-		System.out.println(window.check.getBlackCorrect());		
+//		System.out.println(window.check.getBlackCorrect());		
 				
 	}
 

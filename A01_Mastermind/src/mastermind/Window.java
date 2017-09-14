@@ -32,7 +32,8 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	
 	Container contentPane = getContentPane();			//overall window
 	JPanel grid = new JPanel(); 	//Holds Codemaster, 10 guesses, and userTools
-	JLabel codeMaster = new JLabel("Code Master");		//Holds Codemaster object
+	JPanel codeMasterPanel = new JPanel();
+	JLabel codeMasterText = new JLabel("Code Master");		//Holds Codemaster object
 	JPanel guessContainer = new JPanel(new GridLayout(10,4));
 	JPanel[] pegContainer = new JPanel[10];
 	JPanel userTools =  new JPanel(new GridLayout(1,2)); //holds a grid 1 tall 2 wide
@@ -49,7 +50,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	Pegs[] winPegs = {Pegs.BLACK,Pegs.BLACK,Pegs.BLACK,Pegs.BLACK,}; //Garret
 	boolean stop = false;
 	
-	Colors[] tempColors = {null, null, null, null};
+	Colors[] userGuessColors = {null, null, null, null};
 	Colors[] ColorsGuess = {null, null, null, null};
 	
 	int mouseX, mouseY;
@@ -67,16 +68,23 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		
 		
 		//************ Panel 0 Code Master Object**************
-		codeMaster.setFont(new Font("Tahoma", Font.BOLD, 18));
-		codeMaster.setHorizontalAlignment(SwingConstants.CENTER);		
+		codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 18));
+		codeMasterText.setHorizontalAlignment(SwingConstants.CENTER);		
 		grid.setBackground(new Color(255, 204, 153));
 		grid.setLayout(new BorderLayout());
 		
-		grid.add("North", codeMaster);		
+		codeMasterPanel.add(codeMasterText);
+		grid.add("North", codeMasterPanel);		
 		
 		
 		
-		//********Panels 1 - 10 GuessSection Objects***********
+		/********Panels 1 - 10 GuessSection Objects***********
+		*
+		*	This section iterates through the marbleButtonArray and pegImages array
+		*	and creates 4 buttons for each guess
+		*	and creates 4 pegImages for each guess
+		*	and places them into JPanel guessContainer in order.
+		*/
 
 		for (int i = 0; i < marbleButtonArray.length; i++)
 		{
@@ -84,7 +92,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 			{
 				marbleButtonArray[i][j] = new JButton();				
 				marbleButtonArray[i][j].addActionListener(this);				
-				marbleButtonArray[i][j].setIcon(getIcon(Colors.BLANK));			//make the image a blank peg
+				marbleButtonArray[i][j].setIcon(getMarbleIcon(Colors.BLANK));	//make the image a blank peg
 				marbleButtonArray[i][j].setContentAreaFilled(false);	//clear the gradient and stroke from button
 				marbleButtonArray[i][j].setBorder(null);				//clear border from button
 				guessContainer.add(marbleButtonArray[i][j]);
@@ -102,12 +110,19 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		}
 		
 
-		grid.add("Center", guessContainer);
+		grid.add("Center", guessContainer);//sends guessContainer to grid to be displayed in center panel
 		
 		
 		
 		
-		//*********Panel 11 Color Selection and Submit Button******
+		/*********Panel 11 Color Selection and Submit Button******
+		 *  This section propagates the tools at the bottom of the GUI that
+		 *  the user uses to change color selection of the marbles and submit their
+		 *  guess to the computer
+		 *  
+		 *  userTools is the JPanel container that holds the colored marbles and the submit button
+		 *  colorSelect is an object that creates the colored marble buttons
+		 */
 		userTools.add(colorSelect.getColorGrid());
 		
 		//cycle through colorSelect buttons and add them to the ActionListener
@@ -119,34 +134,43 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		
 		userTools.add(submitBtn);							//add the submit button
 		submitBtn.addActionListener(this);					//add an actionListener for the button
-		grid.add("South", userTools);								//add userTools to the grid
+		grid.add("South", userTools);						//add userTools to the grid
 		
 		
 		contentPane.add("Center", grid);					//display grid in the center pane
 		setVisible(true);									//make gui visible
-	}
+		
+	} //end of Window Constructor
 	
+	/**
+	 * This is the ActionEvent method that holds all the actions performed for all the buttons
+	 */
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
+		
+		//Submit button actions
 		if (event.getSource()==submitBtn)
 			{	
 				
-				int count = 0;
-				for (int i = 0; i < tempColors.length; i++)
-				{
-					if (tempColors[i] != null) count++;
+				int count = 0;									//int to count valid input slots
+				
+				//cycle through all 4 user guesses and check that there are no blank guesses
+				for (int i = 0; i < userGuessColors.length; i++)
+				{					
+					//count all the used slots in userGuessColors
+					if (userGuessColors[i] != null) count++;
 				}
-				if (count == 4)
+				if (count == 4)							//4 means all 4 slots are filled with valid guesses
 				{
-					sendColorsGuess();
-					check.nextTurn();
+					sendColorsGuess();					//sends the guess to the Feedback object
+					check.nextTurn(); 					//iterate the guessTurn counter
 					
 					
-					//reset userGuess[]
-					for (int i = 0; i < tempColors.length; i++)
+					//reset userGuessColors[] by setting all slots to null values
+					for (int i = 0; i < userGuessColors.length; i++)
 					{
-						tempColors[i] = null;
+						userGuessColors[i] = null;
 					}
 				}
 			}
@@ -160,6 +184,11 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		if (event.getSource()==colorSelect.buttons[5]) currentSelectedColor=Colors.BLACK;//black
 		if (event.getSource()==colorSelect.buttons[6]) currentSelectedColor=Colors.BLANK;//blank
 
+		/**
+		 * Cycle through the marbleButtonArray buttons for individual buttons pressed
+		 * When the button that has been pressed is found, change that button's image
+		 * to be the one represented by 'currentSelectedColor'
+		 */
 		for (int i = 0; i < marbleButtonArray.length; i++)
 		{
 			for (int j = 0; j<marbleButtonArray[0].length; j++)
@@ -168,47 +197,57 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 					{
 						if (i == check.getGuessTurn())
 						{
-							marbleButtonArray[i][j].setIcon(getIcon(currentSelectedColor));
-							tempColors[j] = currentSelectedColor;
+							marbleButtonArray[i][j].setIcon(getMarbleIcon(currentSelectedColor));
+							userGuessColors[j] = currentSelectedColor;
 						}
 						
 					}
 			}
 		}
 
-		System.out.print("Temp array: ");
-		for (Colors t : tempColors)
-		{
-			System.out.print(t + " ");
-		}
-		System.out.println();
+//		System.out.print("Temp array: ");
+//		for (Colors t : tempColors)
+//		{
+//			System.out.print(t + " ");
+//		}
+//		System.out.println();
 
 		
-	}
-
+	}//end of actionPerformed()
+	
+	
+	/**
+	 * This method sends information to the feedback object which in turn
+	 * propagates the 'FeedbackReturn' array
+	 */
 	public void sendColorsGuess()   //essentially, this is the method to do when submit is clicked
 	{
-		System.out.println("Sending userGuess values");
-		ColorsGuess = tempColors.clone();
+//		System.out.println("Sending userGuess values");
+		ColorsGuess = userGuessColors.clone();
 		
 		user.setGuess(ColorsGuess);
-		System.out.println("Sent array:");
-		for (int i = 0; i < ColorsGuess.length; i++)
-		{
-			System.out.println(ColorsGuess[i]);
-		}
+//		System.out.println("Sent array:");
+//		for (int i = 0; i < ColorsGuess.length; i++)
+//		{
+//			System.out.println(ColorsGuess[i]);
+//		}
+		
+		/**
+		 * if the game is NOT over propagate the peg icons
+		 */
 		if(!check.isGameOver()) 
 		{
 			//check.blackPegNum(ColorsGuess, master.getAnswer());
 			//check.whitePegNum(ColorsGuess, master.getAnswer());
 			
+			//propagate FeedbackReturn[] with correct peg colors and numbers
 			FeedbackReturn = check.getPegArray(check.getBlackCorrect(), check.getWhiteCorrect());
 			
-			setFeedbackPegIcons(FeedbackReturn);
+			setFeedbackPegIcons(FeedbackReturn); //set icon images based on FeedbackReturn array
 			
-			for(Pegs el : FeedbackReturn) {
-				System.out.println(el);
-			}
+//			for(Pegs el : FeedbackReturn) {
+//				System.out.println(el);
+//			}
 			
 		}
 			//win condition...    winning on first turn is not changing the peg icons... temporary fix by having a "winPegs" array of all blacks
@@ -216,26 +255,30 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 			{
 				setFeedbackPegIcons(winPegs);
 				System.out.println("YOU WIN!!!");//temporary console output for coding purposes
-				codeMaster.setText("YOU WIN!!!");
-				codeMaster.setFont(new Font("Tahoma", Font.BOLD, 20));
-				codeMaster.setHorizontalAlignment(SwingConstants.LEFT);		
-				codeMaster.setForeground(Color.GREEN);
+				codeMasterText.setText("YOU WIN!!!");
+				codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
+				codeMasterText.setHorizontalAlignment(SwingConstants.LEFT);		
+				codeMasterText.setForeground(Color.GREEN);
 			
 			}
 			//lose condition
 			else if(check.isGameOver() && check.getGuessTurn() == 9) {
 				System.out.println("YOU LOSE :(");//temporary console output for coding purposes
-				codeMaster.setText("Sorry, you lose :(");
-				codeMaster.setFont(new Font("Tahoma", Font.BOLD, 20));
-				codeMaster.setHorizontalAlignment(SwingConstants.LEFT);		
-				codeMaster.setForeground(Color.RED);
+				codeMasterText.setText("Sorry, you lose :(");
+				codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
+				codeMasterText.setHorizontalAlignment(SwingConstants.LEFT);		
+				codeMasterText.setForeground(Color.RED);
 			}	
 	}
 	
-	
-	private ImageIcon getIcon(Colors currentSelectedColor2)
+	/**
+	 * 
+	 * @param currentMarble represents the Colors value of the current selected color
+	 * @return the ImageIcon associated with the current selected color
+	 */	
+	private ImageIcon getMarbleIcon(Colors currentMarble)
 	{
-		switch (currentSelectedColor2)
+		switch (currentMarble)
 		{
 		case BLUE:
 			return marbleBlue;
@@ -271,14 +314,14 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	
 	/**
 	 * 
-	 * @param pegNum represents the int value of the current selected peg
+	 * @param currentPeg represents current selected peg
 	 * @return the ImageIcon associated with the current selected color
 	 * 
 	 * 0 = blank, 1 = white, 2 = black
 	 */
-	public ImageIcon getPegIcon(Pegs peg)
+	public ImageIcon getPegIcon(Pegs currentPeg)
 	{
-		switch (peg)
+		switch (currentPeg)
 		{
 		case WHITE:
 			return pegWhite;
