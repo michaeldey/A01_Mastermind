@@ -35,6 +35,8 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	JPanel grid = new JPanel(); 	//Holds Codemaster, 10 guesses, and userTools
 	JPanel codeMasterPanel = new JPanel();
 	JLabel codeMasterText = new JLabel("Code Master");		//Holds Codemaster object
+	JPanel answerHolder = new JPanel();
+	JLabel[] answerImages = new JLabel[4];					//holds the images of the answer
 	JPanel guessContainer = new JPanel(new GridLayout(10,4));
 	JPanel[] pegContainer = new JPanel[10];
 	JPanel userTools =  new JPanel(new GridLayout(1,2)); 		//holds a grid 1 tall 2 wide
@@ -62,10 +64,12 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		super("MasterMind Game");
 		setSize(700,800);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		master.setRandomAnswer();					//sets up the game for the answer
-		answer = master.getAnswer();				//load the answer into answer[]
+		grid.setBackground(new Color(255, 204, 153));
+		grid.setLayout(new BorderLayout());
 		
-		printAnswer();
+		master.setRandomAnswer();					//sets up the game for the answer
+		answer = master.getAnswer();				//load the answer into answer[]		
+		printAnswer();								//print the answer to console (for testing)
 		
 		//add the mouse listener
 		grid.addMouseMotionListener(this);
@@ -74,11 +78,12 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		
 		//************ Panel 0 Code Master Object**************
 		codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 18));
-		codeMasterText.setHorizontalAlignment(SwingConstants.CENTER);		
-		grid.setBackground(new Color(255, 204, 153));
-		grid.setLayout(new BorderLayout());
+		codeMasterText.setHorizontalAlignment(SwingConstants.CENTER);	
 		
+		setAnswerImages();
 		codeMasterPanel.add(codeMasterText);
+//		codeMasterPanel.add(answerHolder);
+//		codeMasterPanel.remove(answerHolder);
 		grid.add("North", codeMasterPanel);		
 		
 		
@@ -147,6 +152,15 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		
 	} //end of Window Constructor
 	
+	private void setAnswerImages() {
+		for (int i = 0; i < answerImages.length; i++)
+		{
+			answerImages[i]=new JLabel();
+			answerImages[i].setIcon(getMarbleIcon(answer[i])); //get the image for the appropriate colors object
+			answerHolder.add(answerImages[i]);	//add the image to the JPanel answerHolder
+		}
+	}
+
 	/**
 	 * this method prints out the answer to the console
 	 * it is for testing purposes
@@ -288,7 +302,8 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 				codeMasterText.setForeground(Color.RED);
 				FeedbackReturn = check.getPegArray(check.getBlackCorrect(), check.getWhiteCorrect()); //show last peg outcome
 				setFeedbackPegIcons(FeedbackReturn);
-			}	
+			}
+		codeMasterPanel.add(answerHolder);
 	}
 	
 	/**
