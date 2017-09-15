@@ -36,7 +36,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	JLabel codeMasterText = new JLabel("Code Master");		//Holds Codemaster object
 	JPanel guessContainer = new JPanel(new GridLayout(10,4));
 	JPanel[] pegContainer = new JPanel[10];
-	JPanel userTools =  new JPanel(new GridLayout(1,2)); //holds a grid 1 tall 2 wide
+	JPanel userTools =  new JPanel(new GridLayout(1,2)); 		//holds a grid 1 tall 2 wide
 	ColorSelect colorSelect = new ColorSelect(listener);		//create a ColorSelect object
 	JButton submitBtn = new JButton("Submit");					//submit button
 	
