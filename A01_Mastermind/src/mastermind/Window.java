@@ -220,7 +220,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	 * This method sends information to the feedback object which in turn
 	 * propagates the 'FeedbackReturn' array
 	 */
-	public void sendColorsGuess()   //essentially, this is the method to do when submit is clicked
+	public void sendColorsGuess()   //this is the method to do the logic and fill the various arrays when submit is clicked
 	{
 //		System.out.println("Sending userGuess values");
 		ColorsGuess = userGuessColors.clone();
@@ -250,12 +250,12 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 //			}
 			
 		}
-			//win condition...    winning on first turn is not changing the peg icons... temporary fix by having a "winPegs" array of all blacks
+			//win condition...
 			else if(check.isGameOver() && check.getBlackCorrect() == 4) 
 			{
-				setFeedbackPegIcons(winPegs);
+				setFeedbackPegIcons(winPegs); //display their winning pegs
 				System.out.println("YOU WIN!!!");//temporary console output for coding purposes
-				codeMasterText.setText("YOU WIN!!!");
+				codeMasterText.setText("YOU WIN!!!"); //changes header to let user know they've won
 				codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
 				codeMasterText.setHorizontalAlignment(SwingConstants.LEFT);		
 				codeMasterText.setForeground(Color.GREEN);
@@ -268,6 +268,8 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 				codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
 				codeMasterText.setHorizontalAlignment(SwingConstants.LEFT);		
 				codeMasterText.setForeground(Color.RED);
+				FeedbackReturn = check.getPegArray(check.getBlackCorrect(), check.getWhiteCorrect()); //show last peg outcome
+				setFeedbackPegIcons(FeedbackReturn);
 			}	
 	}
 	
