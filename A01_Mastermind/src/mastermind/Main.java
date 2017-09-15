@@ -5,7 +5,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		Window window = new Window();
-		window.master.setRandomAnswer();
+		//window.master.setRandomAnswer(); this is a bug
 		
 //		for(Colors el : window.master.getAnswer()){
 //			System.out.println(el);

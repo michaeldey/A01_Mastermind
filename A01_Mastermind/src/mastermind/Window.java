@@ -12,6 +12,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	
 	//create necessary logic objects
 	CodeMaster master = new CodeMaster();
+	Colors[] answer = new Colors[4];			//this array will hold the CodeMaster answer
 	Marble_Slot user = new Marble_Slot();
 	Feedback check = new Feedback();
 	
@@ -61,6 +62,10 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		super("MasterMind Game");
 		setSize(700,800);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		master.setRandomAnswer();					//sets up the game for the answer
+		answer = master.getAnswer();				//load the answer into answer[]
+		
+		printAnswer();
 		
 		//add the mouse listener
 		grid.addMouseMotionListener(this);
@@ -142,6 +147,19 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		
 	} //end of Window Constructor
 	
+	/**
+	 * this method prints out the answer to the console
+	 * it is for testing purposes
+	 */
+	private void printAnswer() {
+		System.out.print("Answer: ");
+		for (Colors c : answer)
+		{
+			System.out.print(c + " ");
+		}
+		System.out.println();
+	}
+
 	/**
 	 * This is the ActionEvent method that holds all the actions performed for all the buttons
 	 */
