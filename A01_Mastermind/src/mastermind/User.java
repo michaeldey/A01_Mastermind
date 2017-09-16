@@ -1,11 +1,11 @@
 package mastermind;
 
-public class Marble_Slot {
+public class User {
 
 	private Colors[] guess = {null, null, null, null};
 	
 	//Constructor
-	public Marble_Slot() {
+	public User() {
 		super();
 		//FIXME: If we need a constructor for separate instances, we must initialize the field when object gets created 
 	}

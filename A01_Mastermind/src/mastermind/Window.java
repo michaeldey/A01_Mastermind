@@ -13,7 +13,7 @@ public class Window extends JFrame implements ActionListener{
 	//create necessary logic objects
 	CodeMaster master = new CodeMaster();
 	Colors[] answer = new Colors[4];			//this array will hold the CodeMaster answer
-	Marble_Slot user = new Marble_Slot();
+	User user = new User();
 	Feedback check = new Feedback();
 	
 	//set up images
@@ -31,6 +31,7 @@ public class Window extends JFrame implements ActionListener{
 	//add the ActionListener object
 	ActionListener listener;
 	
+	//set up GUI containers, labels, and buttons
 	Container contentPane = getContentPane();			//overall window
 	JPanel grid = new JPanel(); 						//Holds Codemaster, 10 guesses, and userTools
 	JPanel codeMasterPanel = new JPanel();
@@ -42,23 +43,15 @@ public class Window extends JFrame implements ActionListener{
 	JPanel userTools =  new JPanel(new GridLayout(1,2)); 		//holds a grid 1 tall 2 wide
 	ColorSelect colorSelect = new ColorSelect(listener);		//create a ColorSelect object
 	JButton submitBtn = new JButton("Submit");					//submit button
-	
-	Colors currentSelectedColor = null;
-	
 	JButton[][] marbleButtonArray = new JButton[10][4]; //array of user guess buttons
 	JLabel[][] pegImages = new JLabel[10][4]; //individual feedback for guesses (10 guesses x 4 pegs)
 	
-	//int[] ColorsGuess = new int[4];
-	Pegs[] FeedbackReturn = new Pegs[4];
-	Pegs[] winPegs = {Pegs.BLACK,Pegs.BLACK,Pegs.BLACK,Pegs.BLACK,}; //Garret
-	boolean stop = false;
-	
-	Colors[] tempColors = {null, null, null, null};
+	//set up arrays for talking with other classes
+	Colors currentSelectedColor = null;
+	Pegs[] FeedbackReturn = new Pegs[4];	
+	Colors[] colorsToCheck = {null, null, null, null}; //temporary array to send to the checker
 	Colors[] ColorsGuess = {null, null, null, null};
 	
-	int mouseX, mouseY;
-	JLabel mouseImage = new JLabel();
-
 	public Window()
 	{
 		super("MasterMind Game");
@@ -78,8 +71,6 @@ public class Window extends JFrame implements ActionListener{
 		
 		setAnswerImages();
 		codeMasterPanel.add(codeMasterText);
-//		codeMasterPanel.add(answerHolder);
-//		codeMasterPanel.remove(answerHolder);
 		grid.add("North", codeMasterPanel);		
 		
 		
@@ -178,30 +169,7 @@ public class Window extends JFrame implements ActionListener{
 	{
 		
 		//Submit button actions
-		if (event.getSource()==submitBtn)
-			{	
-				
-				int count = 0;									//int to count valid input slots
-				
-				//cycle through all 4 user guesses and check that there are no blank guesses
-				for (int i = 0; i < tempColors.length; i++)
-				{					
-					//count all the used slots in userGuessColors
-					if (tempColors[i] != null) count++;
-				}
-				if (count == 4)							//4 means all 4 slots are filled with valid guesses
-				{
-					sendColorsGuess();					//sends the guess to the Feedback object
-					check.nextTurn(); 					//iterate the Feedback object "guessTurn" counter
-					
-					
-					//reset userGuessColors[] by setting all slots to null values
-					for (int i = 0; i < tempColors.length; i++)
-					{
-						tempColors[i] = null;
-					}
-				}
-			}
+		if (event.getSource()==submitBtn){submitAction();}
 		
 		//Statements to set colorSelect.buttons value to the Colors value
 		if (event.getSource()==colorSelect.buttons[0]) currentSelectedColor=Colors.BLUE;//blue	
@@ -226,43 +194,28 @@ public class Window extends JFrame implements ActionListener{
 						if (i == check.getGuessTurn())
 						{
 							marbleButtonArray[i][j].setIcon(getMarbleIcon(currentSelectedColor));
-							tempColors[j] = currentSelectedColor;
+							colorsToCheck[j] = currentSelectedColor;
 						}
 						
 					}
 			}
-		}
-
-//		System.out.print("Temp array: ");
-//		for (Colors t : tempColors)
-//		{
-//			System.out.print(t + " ");
-//		}
-//		System.out.println();
-
-		
+		}	
 	}//end of actionPerformed()
 	
 	
 	/**
 	 * This method sends information to the feedback object which in turn
 	 * propagates the 'FeedbackReturn' array
+	 * 
+	 * this is the method to do the logic and fill the various arrays when submit is clicked
 	 */
-	public void sendColorsGuess()   //this is the method to do the logic and fill the various arrays when submit is clicked
+	public void sendColorsGuess()   
 	{		
-		System.out.println("Sending userGuess values");
-		ColorsGuess = tempColors.clone(); //make a copy of the array
+		ColorsGuess = colorsToCheck.clone(); //make a copy of the array
 		
-		user.setGuess(ColorsGuess);
-		System.out.println("Sent array:");
-		for (int i = 0; i < ColorsGuess.length; i++)
-		{
-			System.out.println(ColorsGuess[i]);
-		}
+		user.setGuess(ColorsGuess); //send copied array to User object
 		
-		/**
-		 * if the game is NOT over propagate the peg icons
-		 */
+		//if the game is NOT over propagate the peg icons
 		if(!check.isGameOver()) 
 		{
 			check.blackPegNum(ColorsGuess, master.getAnswer());
@@ -271,9 +224,9 @@ public class Window extends JFrame implements ActionListener{
 			//propagate FeedbackReturn[] with correct peg colors and numbers
 			FeedbackReturn = check.getPegArray(check.getBlackCorrect(), check.getWhiteCorrect());
 			
-			setFeedbackPegIcons(FeedbackReturn); //set icon images based on FeedbackReturn array
-						
+			setFeedbackPegIcons(FeedbackReturn); //set icon images based on FeedbackReturn array						
 		}
+		
 		//win condition...
 		if(check.isGameOver() && check.getBlackCorrect() == 4) 
 		{
@@ -360,5 +313,37 @@ public class Window extends JFrame implements ActionListener{
 		}
 	}
 
+	/**
+	 *  submitAction() is called from the ActionListener method
+	 *  This is called when the user hits "submit"
+	 *  
+	 *  It counts through the number of user-activated buttons selected
+	 *  and validates that there are 4 activated for a specific turn
+	 *  
+	 *  It processes when there are 4 guesses selected
+	 */
+	private void submitAction()
+	{
+		int count = 0;							//int to count valid input slots
+			
+		//cycle through all 4 user guesses and check that there are no blank guesses
+		for (int i = 0; i < colorsToCheck.length; i++)
+		{					
+			//count all the used slots in userGuessColors
+			if (colorsToCheck[i] != null) count++;
+		}
+		if (count == 4)							//4 means all 4 slots are filled with valid guesses
+		{
+			sendColorsGuess();					//sends the guess to the Feedback object
+			check.nextTurn(); 					//iterate the Feedback object "guessTurn" counter
+				
+				
+			//reset userGuessColors[] by setting all slots to null values
+			for (int i = 0; i < colorsToCheck.length; i++)
+			{
+				colorsToCheck[i] = null;
+			}
+		}
+	}
 
 }//end of Window Class
