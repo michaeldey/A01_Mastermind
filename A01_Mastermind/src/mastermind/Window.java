@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 @SuppressWarnings("serial")
-public class Window extends JFrame implements ActionListener, MouseMotionListener{
+public class Window extends JFrame implements ActionListener{
 	
 	//create necessary logic objects
 	CodeMaster master = new CodeMaster();
@@ -32,7 +32,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	ActionListener listener;
 	
 	Container contentPane = getContentPane();			//overall window
-	JPanel grid = new JPanel(); 	//Holds Codemaster, 10 guesses, and userTools
+	JPanel grid = new JPanel(); 						//Holds Codemaster, 10 guesses, and userTools
 	JPanel codeMasterPanel = new JPanel();
 	JLabel codeMasterText = new JLabel("Code Master");		//Holds Codemaster object
 	JPanel answerHolder = new JPanel();
@@ -53,7 +53,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	Pegs[] winPegs = {Pegs.BLACK,Pegs.BLACK,Pegs.BLACK,Pegs.BLACK,}; //Garret
 	boolean stop = false;
 	
-	Colors[] userGuessColors = {null, null, null, null};
+	Colors[] tempColors = {null, null, null, null};
 	Colors[] ColorsGuess = {null, null, null, null};
 	
 	int mouseX, mouseY;
@@ -70,11 +70,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		master.setRandomAnswer();					//sets up the game for the answer
 		answer = master.getAnswer();				//load the answer into answer[]		
 		printAnswer();								//print the answer to console (for testing)
-		
-		//add the mouse listener
-		grid.addMouseMotionListener(this);
-		mouseImage.setIcon(marbleRed);
-		
+
 		
 		//************ Panel 0 Code Master Object**************
 		codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -188,21 +184,21 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 				int count = 0;									//int to count valid input slots
 				
 				//cycle through all 4 user guesses and check that there are no blank guesses
-				for (int i = 0; i < userGuessColors.length; i++)
+				for (int i = 0; i < tempColors.length; i++)
 				{					
 					//count all the used slots in userGuessColors
-					if (userGuessColors[i] != null) count++;
+					if (tempColors[i] != null) count++;
 				}
 				if (count == 4)							//4 means all 4 slots are filled with valid guesses
 				{
 					sendColorsGuess();					//sends the guess to the Feedback object
-					check.nextTurn(); 					//iterate the guessTurn counter
+					check.nextTurn(); 					//iterate the Feedback object "guessTurn" counter
 					
 					
 					//reset userGuessColors[] by setting all slots to null values
-					for (int i = 0; i < userGuessColors.length; i++)
+					for (int i = 0; i < tempColors.length; i++)
 					{
-						userGuessColors[i] = null;
+						tempColors[i] = null;
 					}
 				}
 			}
@@ -230,7 +226,7 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 						if (i == check.getGuessTurn())
 						{
 							marbleButtonArray[i][j].setIcon(getMarbleIcon(currentSelectedColor));
-							userGuessColors[j] = currentSelectedColor;
+							tempColors[j] = currentSelectedColor;
 						}
 						
 					}
@@ -253,57 +249,54 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 	 * propagates the 'FeedbackReturn' array
 	 */
 	public void sendColorsGuess()   //this is the method to do the logic and fill the various arrays when submit is clicked
-	{
-//		System.out.println("Sending userGuess values");
-		ColorsGuess = userGuessColors.clone();
+	{		
+		System.out.println("Sending userGuess values");
+		ColorsGuess = tempColors.clone(); //make a copy of the array
 		
 		user.setGuess(ColorsGuess);
-//		System.out.println("Sent array:");
-//		for (int i = 0; i < ColorsGuess.length; i++)
-//		{
-//			System.out.println(ColorsGuess[i]);
-//		}
+		System.out.println("Sent array:");
+		for (int i = 0; i < ColorsGuess.length; i++)
+		{
+			System.out.println(ColorsGuess[i]);
+		}
 		
 		/**
 		 * if the game is NOT over propagate the peg icons
 		 */
 		if(!check.isGameOver()) 
 		{
-			//check.blackPegNum(ColorsGuess, master.getAnswer());
-			//check.whitePegNum(ColorsGuess, master.getAnswer());
+			check.blackPegNum(ColorsGuess, master.getAnswer());
+			check.whitePegNum(ColorsGuess, master.getAnswer());
 			
 			//propagate FeedbackReturn[] with correct peg colors and numbers
 			FeedbackReturn = check.getPegArray(check.getBlackCorrect(), check.getWhiteCorrect());
 			
 			setFeedbackPegIcons(FeedbackReturn); //set icon images based on FeedbackReturn array
-			
-//			for(Pegs el : FeedbackReturn) {
-//				System.out.println(el);
-//			}
-			
+						
 		}
-			//win condition...
-			else if(check.isGameOver() && check.getBlackCorrect() == 4) 
-			{
-				setFeedbackPegIcons(winPegs); //display their winning pegs
-				System.out.println("YOU WIN!!!");//temporary console output for coding purposes
-				codeMasterText.setText("YOU WIN!!!"); //changes header to let user know they've won
-				codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
-				codeMasterText.setHorizontalAlignment(SwingConstants.LEFT);		
-				codeMasterText.setForeground(Color.GREEN);
-			
-			}
-			//lose condition
-			else if(check.isGameOver() && check.getGuessTurn() == 9) {
-				System.out.println("YOU LOSE :(");//temporary console output for coding purposes
-				codeMasterText.setText("Sorry, you lose :(");
-				codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
-				codeMasterText.setHorizontalAlignment(SwingConstants.LEFT);		
-				codeMasterText.setForeground(Color.RED);
-				FeedbackReturn = check.getPegArray(check.getBlackCorrect(), check.getWhiteCorrect()); //show last peg outcome
-				setFeedbackPegIcons(FeedbackReturn);
-			}
-		codeMasterPanel.add(answerHolder);
+		//win condition...
+		if(check.isGameOver() && check.getBlackCorrect() == 4) 
+		{
+			//setFeedbackPegIcons(winPegs); //display their winning pegs
+			System.out.println("YOU WIN!!!");//temporary console output for coding purposes
+			codeMasterText.setText("YOU WIN!!!"); //changes header to let user know they've won
+			codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
+			codeMasterText.setHorizontalAlignment(SwingConstants.LEFT);		
+			codeMasterText.setForeground(Color.GREEN);
+			codeMasterPanel.add(answerHolder);
+		}
+		//lose condition
+		if(check.isGameOver() && check.getGuessTurn() == 9) {
+			System.out.println("YOU LOSE :(");//temporary console output for coding purposes
+			codeMasterText.setText("Sorry, you lose :(");
+			codeMasterPanel.add(answerHolder);
+			codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
+			codeMasterText.setHorizontalAlignment(SwingConstants.LEFT);		
+			codeMasterText.setForeground(Color.RED);
+			FeedbackReturn = check.getPegArray(check.getBlackCorrect(), check.getWhiteCorrect()); //show last peg outcome
+			//setFeedbackPegIcons(FeedbackReturn);
+		}
+		
 	}
 	
 	/**
@@ -367,19 +360,5 @@ public class Window extends JFrame implements ActionListener, MouseMotionListene
 		}
 	}
 
-	
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
-		mouseImage.setLocation(mouseY, mouseY);
-		
-	}
 
 }//end of Window Class
