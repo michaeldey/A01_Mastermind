@@ -17,16 +17,7 @@ public class Window extends JFrame implements ActionListener{
 	Feedback check = new Feedback();
 	
 	//set up images
-	ImageIcon marbleHole = new ImageIcon(Window.class.getResource("/images/Circle_Hole_843505.png"));
-	ImageIcon marbleBlue = new ImageIcon(Window.class.getResource("/images/Circle_Blue.png"));
-	ImageIcon marbleGreen = new ImageIcon(Window.class.getResource("/images/Circle_Green.png"));
-	ImageIcon marbleRed = new ImageIcon(Window.class.getResource("/images/Circle_Red.png"));
-	ImageIcon marbleWhite = new ImageIcon(Window.class.getResource("/images/Circle_White.png"));
-	ImageIcon marbleYellow = new ImageIcon(Window.class.getResource("/images/Circle_Yellow.png"));
-	ImageIcon marbleBlack = new ImageIcon(Window.class.getResource("/images/Circle_Black.png"));	
-	ImageIcon pegBlack = new ImageIcon(Window.class.getResource("/images/Peg_Black.png"));
-	ImageIcon pegWhite = new ImageIcon(Window.class.getResource("/images/Peg_White.png"));
-	ImageIcon pegHole = new ImageIcon(Window.class.getResource("/images/Peg_Hole.png"));
+	IconControl imageController = new IconControl();
 
 	//add the ActionListener object
 	ActionListener listener;
@@ -38,11 +29,13 @@ public class Window extends JFrame implements ActionListener{
 	JLabel codeMasterText = new JLabel("Code Master");		//Holds Codemaster object
 	JPanel answerHolder = new JPanel();
 	JLabel[] answerImages = new JLabel[4];					//holds the images of the answer
+	JLabel[] answerImagesBlank = new JLabel[4];				//holds purle blank images
 	JPanel guessContainer = new JPanel(new GridLayout(10,4));
 	JPanel[] pegContainer = new JPanel[10];
 	JPanel userTools =  new JPanel(new GridLayout(1,2)); 		//holds a grid 1 tall 2 wide
 	ColorSelect colorSelect = new ColorSelect(listener);		//create a ColorSelect object
 	JButton submitBtn = new JButton("Submit");					//submit button
+	JButton resetBtn = new JButton("Replay Game");
 	JButton[][] marbleButtonArray = new JButton[10][4]; //array of user guess buttons
 	JLabel[][] pegImages = new JLabel[10][4]; //individual feedback for guesses (10 guesses x 4 pegs)
 	
@@ -51,6 +44,8 @@ public class Window extends JFrame implements ActionListener{
 	Pegs[] FeedbackReturn = new Pegs[4];	
 	Colors[] colorsToCheck = {null, null, null, null}; //temporary array to send to the checker
 	Colors[] ColorsGuess = {null, null, null, null};
+	
+	private boolean resetGame=false;
 	
 	public Window()
 	{
@@ -69,8 +64,9 @@ public class Window extends JFrame implements ActionListener{
 		codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 18));
 		codeMasterText.setHorizontalAlignment(SwingConstants.CENTER);	
 		
-		setAnswerImages();
+		setAnswerImages(false);
 		codeMasterPanel.add(codeMasterText);
+		codeMasterPanel.add(answerHolder);
 		grid.add("North", codeMasterPanel);		
 		
 		
@@ -89,7 +85,7 @@ public class Window extends JFrame implements ActionListener{
 			{
 				marbleButtonArray[i][j] = new JButton();				
 				marbleButtonArray[i][j].addActionListener(this);				
-				marbleButtonArray[i][j].setIcon(getMarbleIcon(Colors.BLANK));	//make the image a blank peg
+				marbleButtonArray[i][j].setIcon(imageController.getMarbleIcon(Colors.BLANK));	//make the image a blank peg
 				marbleButtonArray[i][j].setContentAreaFilled(false);	//clear the gradient and stroke from button
 				marbleButtonArray[i][j].setBorder(null);				//clear border from button
 				guessContainer.add(marbleButtonArray[i][j]);
@@ -100,7 +96,7 @@ public class Window extends JFrame implements ActionListener{
 			for (int k = 0; k < pegImages[0].length; k++)
 			{
 				pegImages[i][k]=new JLabel();
-				pegImages[i][k].setIcon(pegHole);
+				pegImages[i][k].setIcon(imageController.getPegIcon(Pegs.BLANK));
 				pegContainer[i].add(pegImages[i][k]);
 			}
 			guessContainer.add(pegContainer[i]);
@@ -130,7 +126,8 @@ public class Window extends JFrame implements ActionListener{
 		
 		
 		userTools.add(submitBtn);							//add the submit button
-		submitBtn.addActionListener(this);					//add an actionListener for the button
+		submitBtn.addActionListener(this);					//add an actionListener for the submit button
+		resetBtn.addActionListener(this);					//add an actionListener for the reset button
 		grid.add("South", userTools);						//add userTools to the grid
 		
 		
@@ -139,13 +136,29 @@ public class Window extends JFrame implements ActionListener{
 		
 	} //end of Window Constructor
 	
-	private void setAnswerImages() {
-		for (int i = 0; i < answerImages.length; i++)
+	private void setAnswerImages(boolean isGameOver) {
+		
+		if (isGameOver)
 		{
-			answerImages[i]=new JLabel();
-			answerImages[i].setIcon(getMarbleIcon(answer[i])); //get the image for the appropriate colors object
-			answerHolder.add(answerImages[i]);	//add the image to the JPanel answerHolder
+			answerHolder.removeAll();
+			for (int i = 0; i < answerImages.length; i++)
+			{
+				answerImages[i]=new JLabel();
+				answerImages[i].setIcon(imageController.getMarbleIcon(answer[i])); //get the image for the appropriate colors object
+				answerHolder.add(answerImages[i]);	//add the image to the JPanel answerHolder
+			}
 		}
+		else
+		{
+			answerHolder.removeAll();
+			for (int i = 0; i < answerImages.length; i++)
+			{
+				answerImages[i]=new JLabel();
+				answerImages[i].setIcon(imageController.getMystery()); //get the image for the appropriate colors object
+				answerHolder.add(answerImages[i]);	//add the image to the JPanel answerHolder
+			}
+		}
+			
 	}
 
 	/**
@@ -167,6 +180,12 @@ public class Window extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
+		//Reset button action
+		if (event.getSource()==resetBtn)
+		{
+			resetGame=true;
+			this.dispose();
+		} //set resetGame to true
 		
 		//Submit button actions
 		if (event.getSource()==submitBtn){submitAction();}
@@ -193,7 +212,7 @@ public class Window extends JFrame implements ActionListener{
 					{
 						if (i == check.getGuessTurn())
 						{
-							marbleButtonArray[i][j].setIcon(getMarbleIcon(currentSelectedColor));
+							marbleButtonArray[i][j].setIcon(imageController.getMarbleIcon(currentSelectedColor));
 							colorsToCheck[j] = currentSelectedColor;
 						}
 						
@@ -231,12 +250,11 @@ public class Window extends JFrame implements ActionListener{
 		if(check.isGameOver() && check.getBlackCorrect() == 4) 
 		{
 			//setFeedbackPegIcons(winPegs); //display their winning pegs
-			System.out.println("YOU WIN!!!");//temporary console output for coding purposes
 			codeMasterText.setText("YOU WIN!!!"); //changes header to let user know they've won
 			codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
-			codeMasterText.setHorizontalAlignment(SwingConstants.LEFT);		
-			codeMasterText.setForeground(Color.GREEN);
-			codeMasterPanel.add(answerHolder);
+			setAnswerImages(true);
+			userTools.remove(submitBtn);
+			userTools.add(resetBtn);
 		}
 		//lose condition
 		if(check.isGameOver() && check.getGuessTurn() == 9) {
@@ -248,35 +266,13 @@ public class Window extends JFrame implements ActionListener{
 			codeMasterText.setForeground(Color.RED);
 			FeedbackReturn = check.getPegArray(check.getBlackCorrect(), check.getWhiteCorrect()); //show last peg outcome
 			//setFeedbackPegIcons(FeedbackReturn);
+			setAnswerImages(true);
+			userTools.remove(submitBtn);
+			userTools.add(resetBtn);
 		}
 		
 	}
 	
-	/**
-	 * 
-	 * @param currentMarble represents the Colors value of the current selected color
-	 * @return the ImageIcon associated with the current selected color
-	 */	
-	private ImageIcon getMarbleIcon(Colors currentMarble)
-	{
-		switch (currentMarble)
-		{
-		case BLUE:
-			return marbleBlue;
-		case GREEN:
-			return marbleGreen;
-		case RED:
-			return marbleRed;
-		case WHITE:
-			return marbleWhite;
-		case YELLOW:
-			return marbleYellow;
-		case BLACK:
-			return marbleBlack;
-		default:
-			return marbleHole;
-		}
-	}
 
 	/**
 	 * 
@@ -288,30 +284,11 @@ public class Window extends JFrame implements ActionListener{
 	{
 		for (int i = 0; i < pegImages[check.getGuessTurn()].length; i++) //loops through the 4 JPanels
 		{
-			pegImages[check.getGuessTurn()][i].setIcon(getPegIcon(FBR[i])); //find the JPanel and sets the appropriate icon
+			pegImages[check.getGuessTurn()][i].setIcon(imageController.getPegIcon(FBR[i])); //find the JPanel and sets the appropriate icon
 		}
 	}
 	
 	
-	/**
-	 * 
-	 * @param currentPeg represents current selected peg
-	 * @return the ImageIcon associated with the current selected color
-	 * 
-	 * 0 = blank, 1 = white, 2 = black
-	 */
-	public ImageIcon getPegIcon(Pegs currentPeg)
-	{
-		switch (currentPeg)
-		{
-		case WHITE:
-			return pegWhite;
-		case BLACK:
-			return pegBlack;
-		default:
-			return pegHole;
-		}
-	}
 
 	/**
 	 *  submitAction() is called from the ActionListener method
@@ -346,4 +323,9 @@ public class Window extends JFrame implements ActionListener{
 		}
 	}
 
+	public boolean getResetGame()
+	{
+		System.out.println("getResetGame called. resetGame: " + resetGame);
+		return resetGame;
+	}
 }//end of Window Class

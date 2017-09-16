@@ -15,14 +15,15 @@ public class IconControl {
 	private ImageIcon pegBlack = new ImageIcon(Window.class.getResource("/images/Peg_Black.png"));
 	private ImageIcon pegWhite = new ImageIcon(Window.class.getResource("/images/Peg_White.png"));
 	private ImageIcon pegHole = new ImageIcon(Window.class.getResource("/images/Peg_Hole.png"));
+	private ImageIcon mysteryMarble = new ImageIcon(Window.class.getResource("/images/Circle_Blank.png"));
 	
 	public IconControl() {
 		
 	}
 
-	public ImageIcon getIcon(Colors currentSelectedColor)
+	public ImageIcon getMarbleIcon(Colors c)
 	{
-		switch (currentSelectedColor)
+		switch (c)
 		{
 		case BLUE:
 			return marbleBlue;
@@ -39,6 +40,11 @@ public class IconControl {
 		default:
 			return marbleHole;
 		}
+	}
+	
+	public ImageIcon getMystery()
+	{
+		return mysteryMarble;
 	}
 	
 	/**
@@ -60,17 +66,4 @@ public class IconControl {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param FBR is the FeedbackReturn[] propagated in sendColorsGuess()
-	 * This method loops through the JPanels representing the current guess'
-	 * feedback pegs and changes their icons to represent the proper feedback icons
-	 */
-//	public void setFeedbackPegIcons(Pegs[] FBR)
-//	{
-//		for (int i = 0; i < pegImages[check.getGuessTurn()].length; i++) //loops through the 4 JPanels
-//		{
-//			pegImages[check.getGuessTurn()][i].setIcon(getPegIcon(FBR[i])); //find the JPanel and sets the appropriate icon
-//		}
-//	}
 }

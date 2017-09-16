@@ -4,7 +4,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+
+		
+
 		Window window = new Window();
+
 
 		
 //		for(Colors el : window.master.getAnswer()){
