@@ -60,7 +60,7 @@ public class Window extends JFrame implements ActionListener{
 	JButton submitBtn = new JButton("Submit");					//submit button
 	
 	/**set up arrays for talking with other classes*/
-	Colors currentSelectedColor = null;							//currentSelectedColor holds color for peg buttons
+	Colors currentSelectedColor=Colors.BLANK;							//currentSelectedColor holds color for peg buttons
 	Pegs[] FeedbackReturn = new Pegs[4];						//Pegs[] that is recieved from Feedback class	
 	Colors[] colorsToCheck = {null, null, null, null}; 			//temporary array to send to the checker
 	Colors[] ColorsGuess = {null, null, null, null};			//Colors[] that holds the current guess code
@@ -77,7 +77,7 @@ public class Window extends JFrame implements ActionListener{
 		
 		master.setRandomAnswer();					//sets up the game for the answer
 		answer = master.getAnswer();				//load the answer into answer[]		
-		//printAnswer();							//print the answer to console (for testing)
+		printAnswer();							//print the answer to console (for testing)
 
 		
 		/************ Panel 0 Code Master Object**************/
