@@ -11,7 +11,9 @@
  *  Description : (Narrative desciption, not code)
  *
  *    1) What is the purpose of the code; what problem does the code solve.
- *    		This is a game of Mastermind
+ *    		This is the GUI for the Mastermind game.
+ *    		It interacts with the other classes in order to get
+ *    		and send information of how to display the imagery
  *
  *    2) What data-structures are used.
  *    		Enum, Array, ActionListener, Swing GUI, List

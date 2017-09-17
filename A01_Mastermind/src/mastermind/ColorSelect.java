@@ -11,7 +11,9 @@
  *  Description : (Narrative desciption, not code)
  *
  *    1) What is the purpose of the code; what problem does the code solve.
- *    		This is a game of Mastermind
+ *    		ColorSelect creates the section of buttons that the user selects
+ *    		in order to make changes to the current guess buttons
+ *    		it is displayed at the bottom of the Window GUI
  *
  *    2) What data-structures are used.
  *    		Enum, Array, ActionListener, Swing GUI, List

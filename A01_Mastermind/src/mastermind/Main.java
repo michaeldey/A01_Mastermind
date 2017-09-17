@@ -12,6 +12,7 @@
  *
  *    1) What is the purpose of the code; what problem does the code solve.
  *    		This is a game of Mastermind
+ *    		Main.java starts the application
  *
  *    2) What data-structures are used.
  *    		Enum, Array, ActionListener, Swing GUI, List
