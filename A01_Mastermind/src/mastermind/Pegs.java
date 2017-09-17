@@ -11,13 +11,13 @@
  *  Description : (Narrative desciption, not code)
  *
  *    1) What is the purpose of the code; what problem does the code solve.
- *    		This is a game of Mastermind
+ *    		Enum Pegs is a enumeration of the possible pegs to be displayed (including blank).
  *
  *    2) What data-structures are used.
- *    		Enum, Array, ActionListener, Swing GUI, List
+ *    		Enum
  *
  *    3) What algorithms, techniques, etc. are used in implementing the data structures.
- *    		For Loops, Switch Statements, List
+ *    		Enum
  *
  *    4) What methods are implemented (optional).
  *
