@@ -77,7 +77,7 @@ public class Window extends JFrame implements ActionListener{
 		
 		master.setRandomAnswer();					//sets up the game for the answer
 		answer = master.getAnswer();				//load the answer into answer[]		
-		printAnswer();							//print the answer to console (for testing)
+//		printAnswer();							//print the answer to console (for testing)
 
 		
 		/************ Panel 0 Code Master Object**************/
@@ -247,7 +247,6 @@ public class Window extends JFrame implements ActionListener{
 		//lose/win condition for last guess
 		if(check.getGuessTurn() == 9) {
 			
-			System.out.println("YOU LOSE :(");                   //temporary console output for coding purposes
 			FeedbackReturn = check.getPegArray(check.getBlackCorrect(), check.getWhiteCorrect()); //show last peg outcome
 			setAnswerImages(true);								//this boolean will change images at top
 			setFeedbackPegIcons(FeedbackReturn);
