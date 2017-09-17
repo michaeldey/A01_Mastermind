@@ -11,7 +11,8 @@
  *  Description : (Narrative desciption, not code)
  *
  *    1) What is the purpose of the code; what problem does the code solve.
- *    		This is a game of Mastermind
+ *    		Class User is the object that will hold the user's guess as an array of enum Colors.
+ *	It has a simple getter and setter for the one field guess.
  *
  *    2) What data-structures are used.
  *    		Enum, Array, ActionListener, Swing GUI, List
@@ -33,7 +34,6 @@ public class User {
 	//Constructor
 	public User() {
 		super();
-		//FIXME: If we need a constructor for separate instances, we must initialize the field when object gets created 
 	}
 
 	//getter for guess
