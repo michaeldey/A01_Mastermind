@@ -1,3 +1,31 @@
+/********************************************************
+ *
+ *  Project :  A01 Mastermind
+ *  File    :  CodeMaster.java
+ *  
+ *  Name    :  	Garret Rueckert
+ *				Michael Dey
+ *
+ *  Date    :  September 16, 2017
+ *
+ *  Description : (Narrative desciption, not code)
+ *
+ *    1) What is the purpose of the code; what problem does the code solve.
+ *    		Class CodeMaster is the object that will generate a random code of a Colors array and return
+ *	our "answer" as the same.
+ *
+ *    2) What data-structures are used.
+ *    		Enum, Array, For Loops
+ *
+ *    3) What algorithms, techniques, etc. are used in implementing the data structures.
+ *    		For Loops, Getters and Setters
+ *
+ *    4) What methods are implemented (optional).
+ *		getAnswer, setRandomAnswer
+ *
+ *  Changes :  <Description|date of modifications>
+ *
+ ********************************************************/
 package mastermind;
 
 public class CodeMaster {
@@ -6,7 +34,7 @@ public class CodeMaster {
 	private Colors[] answer = {null, null, null, null};
 	
 	/*
-	 * Constructor for CodeMaster... Currently just the default, no superclass implementation as of yet.
+	 * Constructor for CodeMaster.
 	 */
 	public CodeMaster() {
 		super();	
