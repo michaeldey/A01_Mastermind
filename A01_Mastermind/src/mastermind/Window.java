@@ -244,16 +244,27 @@ public class Window extends JFrame implements ActionListener{
 			codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
 			setAnswerImages(true);								//this boolean will change images at top
 		}
-		//lose condition
-		if(check.isGameOver() && check.getGuessTurn() == 9) {
-			System.out.println("YOU LOSE :(");//temporary console output for coding purposes
-			codeMasterText.setText("Sorry, you lose :(");
+		//lose/win condition for last guess
+		if(check.getGuessTurn() == 9) {
+			
+			System.out.println("YOU LOSE :(");                   //temporary console output for coding purposes
+			FeedbackReturn = check.getPegArray(check.getBlackCorrect(), check.getWhiteCorrect()); //show last peg outcome
+			setAnswerImages(true);								//this boolean will change images at top
+			setFeedbackPegIcons(FeedbackReturn);
 			codeMasterPanel.add(answerHolder);
+			
+			if(check.getBlackCorrect() < 4) 
+			{
+			codeMasterText.setText("Sorry, you lose :(");
 			codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
 			codeMasterText.setHorizontalAlignment(SwingConstants.LEFT);		
 			codeMasterText.setForeground(Color.RED);
-			FeedbackReturn = check.getPegArray(check.getBlackCorrect(), check.getWhiteCorrect()); //show last peg outcome
-			setAnswerImages(true);								//this boolean will change images at top
+			}
+			if(check.getBlackCorrect() == 4) 
+			{
+				codeMasterText.setText("YOU WIN!!!"); 	//changes header to let user know they've won
+				codeMasterText.setFont(new Font("Tahoma", Font.BOLD, 20));
+			}
 		}
 		
 	}
