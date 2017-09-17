@@ -129,7 +129,7 @@ public class Feedback {
 	 * is 4 (win condition), or if guesses exceed 10 (0 to 9 being 10 guesses).
 	 */
 	public boolean isGameOver() {
-		if(this.blackCorrect == 4 || this.guessTurn == 9) {
+		if(this.blackCorrect == 4 || this.guessTurn > 9) {
 			return true;
 		}
 		return false;
