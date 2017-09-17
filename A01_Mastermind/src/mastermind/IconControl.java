@@ -11,13 +11,15 @@
  *  Description : (Narrative desciption, not code)
  *
  *    1) What is the purpose of the code; what problem does the code solve.
- *    		This is a game of Mastermind
+ *    		Class IconControl is a class that will hold our images for our GUI. It has a getter
+ *	(controlled by a switch statement) for the marble images, a getter for mystery image (so that we would not
+ *	need to add "MYSTERY" into the Colors enum, and a getter for the peg images.
  *
  *    2) What data-structures are used.
- *    		Enum, Array, ActionListener, Swing GUI, List
+ *    		Enum, Array, ImageIcon
  *
  *    3) What algorithms, techniques, etc. are used in implementing the data structures.
- *    		For Loops, Switch Statements, List
+ *    		Switch Statements, Fields
  *
  *    4) What methods are implemented (optional).
  *
