@@ -1,3 +1,29 @@
+/********************************************************
+ *
+ *  Project :  A01 Mastermind
+ *  File    :  ColorSelect.java
+ *  
+ *  Name    :  	Garret Rueckert
+ *				Michael Dey
+ *
+ *  Date    :  September 16, 2017
+ *
+ *  Description : (Narrative desciption, not code)
+ *
+ *    1) What is the purpose of the code; what problem does the code solve.
+ *    		This is a game of Mastermind
+ *
+ *    2) What data-structures are used.
+ *    		Enum, Array, ActionListener, Swing GUI, List
+ *
+ *    3) What algorithms, techniques, etc. are used in implementing the data structures.
+ *    		For Loops, Switch Statements, List
+ *
+ *    4) What methods are implemented (optional).
+ *
+ *  Changes :  <Description|date of modifications>
+ *
+ ********************************************************/
 package mastermind;
 
 import javax.swing.*;
@@ -19,33 +45,31 @@ public class ColorSelect extends JFrame {
 	ImageIcon marbleHole = new ImageIcon(Window.class.getResource("/images/Circle_Hole_843505.png"));
 	ImageIcon[] images = new ImageIcon[]{marbleBlue, marbleGreen, marbleRed, marbleWhite, marbleYellow, marbleBlack, marbleHole};
 	
-	private JPanel colorGrid = new JPanel(new GridLayout(1,7));	//new JPanel 6 wide, 1 tall
-	public JButton[] buttons = new JButton[images.length];
-	
+	/**Set up the holders of the images*/
+	private JPanel colorGrid = new JPanel(new GridLayout(1,7));	//new JPanel 7 wide, 1 tall
+	public JButton[] buttons = new JButton[images.length];		//array of JButtons	
 	
 	//constructor
-	public ColorSelect(ActionListener listener)
-	{
+	public ColorSelect(ActionListener listener)	{
 
 		//loop through the buttons and add them
 		for (int i = 0; i < buttons.length; i++)
 		{
-			buttons[i] = new JButton();					//create a JButton
-			buttons[i].setIcon(images[i]);				//add the corresponding image
-			buttons[i].setContentAreaFilled(false);		//get rid of the gradient
-			buttons[i].setBorder(null);					//get rid of the border	
-			colorGrid.add(buttons[i]);					//add the button to colorGrid
+			buttons[i] = new JButton();							//create a JButton
+			buttons[i].setIcon(images[i]);						//add the corresponding image
+			buttons[i].setContentAreaFilled(false);				//get rid of the gradient
+			buttons[i].setBorder(null);							//get rid of the border	
+			colorGrid.add(buttons[i]);							//add the button to colorGrid
 		}
 	}
 	
+	/**
+	 * 
+	 * @return JPanel colorGrid which holds the buttons
+	 */
 	public JPanel getColorGrid()
 	{
 		return colorGrid;
-	}
-
-	public int getButtonIndex()
-	{
-		return 0;
 	}
 
 	/**

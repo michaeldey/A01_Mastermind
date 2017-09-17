@@ -1,29 +1,37 @@
+/********************************************************
+ *
+ *  Project :  A01 Mastermind
+ *  File    :  Main.java
+ *  
+ *  Name    :  	Garret Rueckert
+ *				Michael Dey
+ *
+ *  Date    :  September 16, 2017
+ *
+ *  Description : (Narrative desciption, not code)
+ *
+ *    1) What is the purpose of the code; what problem does the code solve.
+ *    		This is a game of Mastermind
+ *
+ *    2) What data-structures are used.
+ *    		Enum, Array, ActionListener, Swing GUI, List
+ *
+ *    3) What algorithms, techniques, etc. are used in implementing the data structures.
+ *    		For Loops, Switch Statements, List
+ *
+ *    4) What methods are implemented (optional).
+ *
+ *  Changes :  <Description|date of modifications>
+ *
+ ********************************************************/
+
 package mastermind;
 
 public class Main {
 
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) {		
 
-		
-
-		Window window = new Window();
-
-
-		
-//		for(Colors el : window.master.getAnswer()){
-//			System.out.println(el);
-//		}
-			
-		
-		//Don't want user array updated until submit is actually clicked...
-//		while(!window.check.isGameOver()) {
-//			//as of now, must do blackPegNum first
-//			window.check.blackPegNum(window.user.getGuess(), window.master.getAnswer());
-//			window.check.whitePegNum(window.user.getGuess(), window.master.getAnswer());	
-//		}
-				
-//		System.out.println(window.check.getBlackCorrect());		
+		Window window = new Window();			//start the Game
 				
 	}
 
